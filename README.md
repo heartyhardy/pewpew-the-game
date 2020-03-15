@@ -10,3 +10,4 @@ Pewpew is a simple 2D platformer with minimalistic styles
 * Player now have basic shooting ability
 * Added basic collisions and cleanup
 
+![](https://raw.githubusercontent.com/heartyhardy/pewpew-the-game/master/previews/pewpew-d-1.gif)
