@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://tilesets/basic_tileset_v1.tres" type="TileSet" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Spidermine.tscn" type="PackedScene" id=3]
 
 [node name="LevelOne" type="Node2D"]
 
@@ -14,3 +15,9 @@ tile_data = PoolIntArray( 0, 9, 0, 65536, 9, 0, 131072, 9, 0, 196608, 9, 0, 2621
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 16, 144 )
 speed = 55
+
+[node name="Spidermine" parent="." instance=ExtResource( 3 )]
+position = Vector2( 104, 72 )
+
+[node name="Spidermine2" parent="." instance=ExtResource( 3 )]
+position = Vector2( 104, 144 )

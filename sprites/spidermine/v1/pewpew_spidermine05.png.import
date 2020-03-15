@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/pewpew spritesheet v1-1.png.png-125984ede6ab89b683b4f2eec30aa351.stex"
+path="res://.import/pewpew_spidermine05.png-52629a800fcf80f85004ca96d96600fc.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/player/pewpew spritesheet v1-1.png.png"
-dest_files=[ "res://.import/pewpew spritesheet v1-1.png.png-125984ede6ab89b683b4f2eec30aa351.stex" ]
+source_file="res://sprites/spidermine/v1/pewpew_spidermine05.png"
+dest_files=[ "res://.import/pewpew_spidermine05.png-52629a800fcf80f85004ca96d96600fc.stex" ]
 
 [params]
 

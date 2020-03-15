@@ -1,0 +1,62 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine09.png" type="Texture" id=1]
+[ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine08.png" type="Texture" id=2]
+[ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine10.png" type="Texture" id=3]
+[ext_resource path="res://Spidermine.gd" type="Script" id=4]
+[ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine07.png" type="Texture" id=5]
+[ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine01.png" type="Texture" id=6]
+[ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine02.png" type="Texture" id=7]
+[ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine05.png" type="Texture" id=8]
+[ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine06.png" type="Texture" id=9]
+[ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine04.png" type="Texture" id=10]
+[ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine00.png" type="Texture" id=11]
+[ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine03.png" type="Texture" id=12]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 11 ), ExtResource( 10 ), ExtResource( 8 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "Attack",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 11 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 12 ) ],
+"loop": true,
+"name": "Patrol",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 10 ), ExtResource( 5 ), ExtResource( 2 ), ExtResource( 1 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "Death",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 5, 8 )
+
+[node name="Spidermine" type="KinematicBody2D"]
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Spider_Anim" type="AnimatedSprite" parent="."]
+scale = Vector2( 2, 2 )
+frames = SubResource( 1 )
+animation = "Patrol"
+frame = 3
+
+[node name="Spider_Hitbox" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2( -1, 0 )
+shape = SubResource( 2 )
+
+[node name="LedgeDetectRay" type="RayCast2D" parent="."]
+position = Vector2( 5.83559, -0.135275 )
+enabled = true
+cast_to = Vector2( 0, 10 )
+
+[node name="VisonRay" type="RayCast2D" parent="."]
+position = Vector2( 5.97087, -2.97606 )
+enabled = true
+cast_to = Vector2( 50, 0 )

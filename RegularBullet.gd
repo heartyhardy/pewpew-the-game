@@ -26,5 +26,5 @@ func _on_Bullet_Visibility_screen_exited():
 	queue_free()
 
 #RELEASE IF COLLIDE
-func _on_RegularBullet_body_entered(body):
+func _on_RegularBullet_body_entered(_body):
 	queue_free()
