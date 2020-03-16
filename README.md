@@ -11,3 +11,12 @@ Pewpew is a simple 2D platformer with minimalistic styles
 * Added basic collisions and cleanup
 
 ![](https://raw.githubusercontent.com/heartyhardy/pewpew-the-game/master/previews/pewpew-d-1.gif)
+
+
+## Day 2 - 16/03/2020
+* Added "Spidermine" enemy
+* Added basic collisions and ledge detection for the enemy
+* Enemy has two stances: "Patrol" and "Attack"
+* Added "Attack", "Patrol" and "Death" animations
+
+![](https://raw.githubusercontent.com/heartyhardy/pewpew-the-game/master/previews/pewpew-d-2.gif)
