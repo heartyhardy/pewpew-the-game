@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 export(int) var speed = 30
+export(int) var hp = 100
 
 const GRAVITY = 10
 const JUMP_FORCE = -250
@@ -11,11 +12,16 @@ const REGULAR_BULLET = preload("res://RegularBullet.tscn")
 var velocity = Vector2()
 var is_on_ground = false
 var is_attacking = false
+var is_alive = true
 
 func _ready():
 	PlayerGlobals.set("player", self)
 
 func _physics_process(delta):
+	
+#	IF DEAD DON'T PROCESS PHYSICS
+	if !is_alive:
+		return
 	
 #	HORIZONTAL MOVEMENT
 	if Input.is_action_pressed("ui_right"):
@@ -73,10 +79,15 @@ func _physics_process(delta):
 				$Player_Anim.play("Fall")
 		
 	velocity = move_and_slide(velocity, FLOOR)
+	
+
+#ON TAKE DAMAGE
+func on_enemy_hit(dmg):
+	hp -= dmg
+	if hp <= 0:
+		queue_free()
+		
 
 #IS THE ANIMATION DONE?
 func _on_Player_Anim_animation_finished():
 	is_attacking = false
-
-func die():
-	print_debug("DEEEEAD")

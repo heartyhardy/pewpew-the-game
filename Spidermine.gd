@@ -5,6 +5,7 @@ const FLOOR = Vector2(0, -1)
 
 export(int) var speed = 40
 export(int) var hp = 50
+export(int) var damage = 50
 
 var prev_speed = speed
 var velocity = Vector2()
@@ -68,7 +69,7 @@ func _physics_process(delta):
 				is_alive = false
 				$Spider_Hitbox.set_deferred("disabled", true)
 				$Spider_Anim.play("Explode")
-				get_slide_collision(i).collider.die()
+				get_slide_collision(i).collider.on_enemy_hit(damage)
 		
 
 func turn():
