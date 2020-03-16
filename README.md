@@ -20,3 +20,12 @@ Pewpew is a simple 2D platformer with minimalistic styles
 * Added "Attack", "Patrol" and "Death" animations
 
 ![](https://raw.githubusercontent.com/heartyhardy/pewpew-the-game/master/previews/pewpew-d-2.gif)
+
+
+## Day 3 - 17/03/2020
+* Added "Spidermine" "Explode" ability
+* Enemy gets aggravated by shooting from behind
+* Player and enemies has HP and can receive damage now
+* Added a basic Camera
+
+![](https://raw.githubusercontent.com/heartyhardy/pewpew-the-game/master/previews/pewpew-d-3.gif)
