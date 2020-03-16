@@ -13,7 +13,7 @@ var is_on_ground = false
 var is_attacking = false
 
 func _ready():
-	pass # Replace with function body.
+	PlayerGlobals.set("player", self)
 
 func _physics_process(delta):
 	
@@ -77,3 +77,6 @@ func _physics_process(delta):
 #IS THE ANIMATION DONE?
 func _on_Player_Anim_animation_finished():
 	is_attacking = false
+
+func die():
+	print_debug("DEEEEAD")

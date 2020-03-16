@@ -4,15 +4,29 @@ const GRAVITY = 10
 const FLOOR = Vector2(0, -1)
 
 export(int) var speed = 40
+export(int) var hp = 50
+
+var prev_speed = speed
 var velocity = Vector2()
 var direction = 1
 var is_attacking = false
+var is_alive = true
 
+#SET TYPE TO ENEMY
 func _ready():
-	pass # Replace with function body.
+	set_meta("Type","ENEMY")
 
 func _physics_process(delta):
-	velocity.x = speed * direction
+	
+	if !is_alive:
+		return
+	
+#	IF NOT ATTACKING MOVE NORMALLY OR MOVE 2X FASTER
+	if !is_attacking:
+		velocity.x = speed * direction
+	elif is_attacking:
+		velocity.x = speed * 2 * direction
+		
 	velocity.y += GRAVITY
 	
 #	FLIP SPRITE WHEN DIRECTION CHANGES
@@ -24,18 +38,17 @@ func _physics_process(delta):
 #	CHANGE ANIMATION DEPENDING ON STATE
 	if !is_attacking:
 		$Spider_Anim.play("Patrol")
+		$VisonRay.cast_to = Vector2(direction * 50,0)
 	elif is_attacking:
 		$Spider_Anim.play("Attack")
+		$VisonRay.cast_to = Vector2(direction * 100,0)
 		
 		
 	velocity = move_and_slide(velocity, FLOOR)
 	
 #	CHANGE RAYCASTING DIRECTION
 	if is_on_wall():
-		direction *= -1
-		$LedgeDetectRay.position.x *= -1
-		$VisonRay.position.x *= -1
-		$VisonRay.cast_to *= -1
+		turn()
 	
 #	IF PLAYER IS BEING DETECTED ATTACK
 	if $VisonRay.is_colliding():
@@ -46,8 +59,44 @@ func _physics_process(delta):
 
 #	IF LEDGE IS DETECTED CHANGE RAYCASTING DIRECTION
 	if !$LedgeDetectRay.is_colliding() and !is_attacking:
-		direction *= -1
-		$LedgeDetectRay.position.x *= -1
-		$VisonRay.position.x *= -1
-		$VisonRay.cast_to *= -1
+		turn()
 		
+#	IF PLAYER GETS HIT THEN EXPLODE
+	if get_slide_count() > 0:
+		for i in (get_slide_count()):
+			if "Player" in get_slide_collision(i).collider.name:
+				is_alive = false
+				$Spider_Hitbox.set_deferred("disabled", true)
+				$Spider_Anim.play("Explode")
+				get_slide_collision(i).collider.die()
+		
+
+func turn():
+	direction *= -1
+	$LedgeDetectRay.position.x *= -1
+	$VisonRay.position.x *= -1
+	$VisonRay.cast_to *= -1
+
+#ON PLAYER HIT, TURN IF NECESSARY
+func hit_by_player(dmg,xpos):
+	hp -= dmg
+	if should_turn():
+		turn()
+	if hp <= 0:
+		is_alive = false
+		$Spider_Hitbox.set_deferred("disabled", true)
+		$Spider_Anim.play("Death")
+
+#WHEN GETS HIT BY PLAYER FROM BEHIND, TURN BACK
+func should_turn():
+	var player_pos = PlayerGlobals.get("player").position.x
+	if player_pos < position.x and sign($VisonRay.position.x) == 1:
+		return true
+	if player_pos > position.x and sign($VisonRay.position.x) == -1:
+		return true
+	return false
+
+#QUEUE FREE IF DEAD
+func _on_Spider_Anim_animation_finished():
+	if !is_alive:
+		queue_free()

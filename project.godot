@@ -19,6 +19,10 @@ config/name="pewpew"
 run/main_scene="res://LevelOne.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+PlayerGlobals="*res://PlayerGlobals.tscn"
+
 [display]
 
 window/size/width=320
