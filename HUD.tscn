@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://HealthCounter.tscn" type="PackedScene" id=1]
+[ext_resource path="res://AmmoCounter.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ArmorCounter.tscn" type="PackedScene" id=3]
+[ext_resource path="res://HUD.gd" type="Script" id=4]
+
+[node name="HUD" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StatusBar" type="HBoxContainer" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -152.0
+margin_bottom = 18.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AmmoCounter" parent="StatusBar" instance=ExtResource( 2 )]
+
+[node name="ArmorCounter" parent="StatusBar" instance=ExtResource( 3 )]
+margin_left = 52.0
+margin_right = 100.0
+
+[node name="HealthCounter" parent="StatusBar" instance=ExtResource( 1 )]
+margin_left = 104.0
+margin_right = 152.0
+
+[node name="HPBlinkTimer" type="Timer" parent="."]
+wait_time = 0.5
+[connection signal="timeout" from="HPBlinkTimer" to="." method="_on_Timer_timeout"]

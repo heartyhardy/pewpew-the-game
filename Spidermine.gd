@@ -79,7 +79,7 @@ func turn():
 	$VisonRay.cast_to *= -1
 
 #ON PLAYER HIT, TURN IF NECESSARY
-func hit_by_player(dmg,xpos):
+func hit_by_player(dmg):
 	hp -= dmg
 	if should_turn():
 		turn()

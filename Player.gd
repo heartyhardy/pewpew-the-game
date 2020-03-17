@@ -2,6 +2,8 @@ extends KinematicBody2D
 
 export(int) var speed = 30
 export(int) var hp = 100
+export(int) var armor = 50
+export(int) var ammo = 100
 
 const GRAVITY = 10
 const JUMP_FORCE = -250
@@ -16,6 +18,9 @@ var is_alive = true
 
 func _ready():
 	PlayerGlobals.set("player", self)
+	PlayerGlobals.set("hp", hp)
+	PlayerGlobals.set("armor", armor)
+	PlayerGlobals.set("ammo", ammo)
 
 func _physics_process(delta):
 	
@@ -51,11 +56,14 @@ func _physics_process(delta):
 			velocity.y = JUMP_FORCE
 			is_on_ground = false
 		
-#	SHOOT
+#	SHOOT IF PLAYER HAS AMMO
 	if Input.is_action_just_pressed("ui_select") and !is_attacking:
+		if ammo <= 0:
+			return
 		if is_on_floor():
 			velocity.x = 0
 		is_attacking = true
+		reduce_one_from_ammo()
 		$Player_Anim.play("Shoot")
 		var weapon_projectile = REGULAR_BULLET.instance()
 		weapon_projectile.set_direction(sign($ShootPoint.position.x))
@@ -81,11 +89,31 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity, FLOOR)
 	
 
-#ON TAKE DAMAGE
+#ON TAKE DAMAGE SEE IF PLAYER IS ALIVE AND UPDATE HP
 func on_enemy_hit(dmg):
-	hp -= dmg
+	reduce_from_armor(dmg)
+	PlayerGlobals.set_hp(hp)
 	if hp <= 0:
+		PlayerGlobals.set_hp(hp)
 		queue_free()
+		
+
+#ON SHOOT REDUCE ONE AMMO FROM CURRENT AMMO
+func reduce_one_from_ammo():
+	ammo -= 1
+	if ammo < 0:
+		ammo = 0
+	PlayerGlobals.set_ammo(ammo)
+
+#IF PLAYER HAS ARMOR REDUCE DMG FROM ARMOR, IF NOT REDUCE FROM HP
+func reduce_from_armor(dmg):
+	var remainder = armor - dmg
+	if remainder >= 0:
+		armor = remainder
+	elif remainder < 0:
+		hp += remainder
+		armor = 0
+	PlayerGlobals.set_armor(armor)
 		
 
 #IS THE ANIMATION DONE?

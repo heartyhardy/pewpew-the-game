@@ -30,5 +30,5 @@ func _on_Bullet_Visibility_screen_exited():
 #RELEASE IF COLLIDE
 func _on_RegularBullet_body_entered(body):
 	if body.get_meta("Type") == "ENEMY":
-		body.hit_by_player(damage, position.x)
+		body.hit_by_player(damage)
 	queue_free()

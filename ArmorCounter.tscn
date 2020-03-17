@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ui/icons/armor.png" type="Texture" id=1]
+[ext_resource path="res://Counter.tscn" type="PackedScene" id=2]
+
+[node name="ArmorCounter" instance=ExtResource( 2 )]
+
+[node name="Icon" parent="." index="0"]
+margin_left = -1.0
+margin_right = 21.0
+texture = ExtResource( 1 )
