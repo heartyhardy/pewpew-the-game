@@ -29,6 +29,8 @@ func _on_Bullet_Visibility_screen_exited():
 
 #RELEASE IF COLLIDE
 func _on_RegularBullet_body_entered(body):
-	if body.get_meta("Type") == "ENEMY":
-		body.hit_by_player(damage)
+	if body.name != 'TileMap':		
+		var b_type = body.get_meta('TAG')
+		if b_type == 'ENEMY':
+			body.hit_by_player(damage)
 	queue_free()

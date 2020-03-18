@@ -25,11 +25,11 @@ func _ready():
 func _physics_process(delta):
 	
 #	IF DEAD DON'T PROCESS PHYSICS
-	if !is_alive:
+	if !is_alive and is_on_floor():
 		return
 	
 #	HORIZONTAL MOVEMENT
-	if Input.is_action_pressed("ui_right"):
+	if Input.is_action_pressed("ui_right") and is_alive:
 		if !is_attacking or !is_on_floor():
 			velocity.x = speed
 			if !is_attacking:
@@ -37,7 +37,7 @@ func _physics_process(delta):
 				$Player_Anim.flip_h = false
 				if sign($ShootPoint.position.x)  == -1:
 					$ShootPoint.position.x *= -1
-	elif Input.is_action_pressed("ui_left"):
+	elif Input.is_action_pressed("ui_left") and is_alive:
 		if !is_attacking or !is_on_floor():
 			velocity.x = -speed
 			if !is_attacking:
@@ -47,17 +47,17 @@ func _physics_process(delta):
 					$ShootPoint.position.x *= -1
 	else:
 		velocity.x = 0
-		if is_on_ground and !is_attacking:
+		if is_on_ground and !is_attacking and is_alive:
 			$Player_Anim.play("Idle")
 	
 #	VERTICAL MOVEMENT
-	if Input.is_action_pressed("ui_up") and is_on_ground:
+	if Input.is_action_pressed("ui_up") and is_on_ground and is_alive:
 		if !is_attacking:
 			velocity.y = JUMP_FORCE
 			is_on_ground = false
 		
 #	SHOOT IF PLAYER HAS AMMO
-	if Input.is_action_just_pressed("ui_select") and !is_attacking:
+	if Input.is_action_just_pressed("ui_select") and !is_attacking and is_alive:
 		if ammo <= 0:
 			return
 		if is_on_floor():
@@ -74,12 +74,12 @@ func _physics_process(delta):
 	velocity.y += GRAVITY
 	
 #	IS PLAYER ON FLOOR?
-	if is_on_floor():
+	if is_on_floor() and is_alive:
 		if !is_on_ground:
 			is_attacking = false
 		is_on_ground = true
 	else:
-		if !is_attacking:
+		if !is_attacking and is_alive:
 			is_on_ground = false
 			if velocity.y < 0:
 				$Player_Anim.play("Jump")
@@ -95,7 +95,7 @@ func on_enemy_hit(dmg):
 	PlayerGlobals.set_hp(hp)
 	if hp <= 0:
 		PlayerGlobals.set_hp(hp)
-		queue_free()
+		on_player_death()
 		
 
 #ON SHOOT REDUCE ONE AMMO FROM CURRENT AMMO
@@ -116,6 +116,13 @@ func reduce_from_armor(dmg):
 	PlayerGlobals.set_armor(armor)
 		
 
+func on_player_death():
+	is_alive = false
+	$Player_Anim.play("Death")
+	
+
 #IS THE ANIMATION DONE?
 func _on_Player_Anim_animation_finished():
+	if !is_alive:
+		queue_free()
 	is_attacking = false

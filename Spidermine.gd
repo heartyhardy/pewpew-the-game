@@ -13,9 +13,12 @@ var direction = 1
 var is_attacking = false
 var is_alive = true
 
+onready var hpbar = $HealthBar 
+
 #SET TYPE TO ENEMY
 func _ready():
-	set_meta("Type","ENEMY")
+	self.set_meta('TAG','ENEMY')
+	hpbar.on_maxhp_updated(hp)	
 
 func _physics_process(delta):
 	
@@ -67,6 +70,7 @@ func _physics_process(delta):
 		for i in (get_slide_count()):
 			if "Player" in get_slide_collision(i).collider.name:
 				is_alive = false
+				hpbar.on_hp_updated(0)
 				$Spider_Hitbox.set_deferred("disabled", true)
 				$Spider_Anim.play("Explode")
 				get_slide_collision(i).collider.on_enemy_hit(damage)
@@ -81,6 +85,7 @@ func turn():
 #ON PLAYER HIT, TURN IF NECESSARY
 func hit_by_player(dmg):
 	hp -= dmg
+	hpbar.on_hp_updated(hp)
 	if should_turn():
 		turn()
 	if hp <= 0:

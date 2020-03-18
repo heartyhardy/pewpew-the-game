@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine09.png" type="Texture" id=1]
 [ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine08.png" type="Texture" id=2]
@@ -22,6 +22,7 @@
 [ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine12.png" type="Texture" id=20]
 [ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine13.png" type="Texture" id=21]
 [ext_resource path="res://sprites/spidermine/v1/pewpew_spidermine14.png" type="Texture" id=22]
+[ext_resource path="res://HealthBar.tscn" type="PackedScene" id=23]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -58,8 +59,7 @@ __meta__ = {
 [node name="Spider_Anim" type="AnimatedSprite" parent="."]
 scale = Vector2( 2, 2 )
 frames = SubResource( 1 )
-animation = "Explode"
-frame = 9
+animation = "Patrol"
 
 [node name="Spider_Hitbox" type="CollisionShape2D" parent="."]
 visible = false
@@ -75,4 +75,11 @@ cast_to = Vector2( 0, 10 )
 position = Vector2( 5.97087, -2.97606 )
 enabled = true
 cast_to = Vector2( 50, 0 )
+
+[node name="HealthBar" parent="." instance=ExtResource( 23 )]
+margin_left = -8.0
+margin_top = -18.0
+margin_right = -8.0
+margin_bottom = -18.0
+rect_scale = Vector2( 0.3, 0.45 )
 [connection signal="animation_finished" from="Spider_Anim" to="." method="_on_Spider_Anim_animation_finished"]

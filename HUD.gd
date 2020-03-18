@@ -7,9 +7,10 @@ var green = Color("#87c51c")
 var orange = Color("#f79b05")
 var red = Color("#bf4523")
 
-func _ready():
-	player = PlayerGlobals.get_player()
+func _on_Player_ready():
+	player = PlayerGlobals.player
 
+# warning-ignore:unused_argument
 func _physics_process(delta):
 	
 #	UPDATE LABEL TEXT AND COLORS
@@ -51,3 +52,4 @@ func _on_Timer_timeout():
 		elif !is_visible:
 			$StatusBar/HealthCounter/Icon.visible = true
 			
+
