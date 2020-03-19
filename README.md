@@ -49,3 +49,12 @@ Pewpew is a simple 2D platformer with minimalistic styles
 
 ![](https://raw.githubusercontent.com/heartyhardy/pewpew-the-game/master/previews/pewpew-d-5.gif)
 
+
+
+## Day 6 - 19/03/2020
+* Drew a new Tilemap for a parallax layer
+* Implemented parallax effect via CanvasLayers
+* Wrote a simple blur shader to defocus the midground
+
+
+![](https://raw.githubusercontent.com/heartyhardy/pewpew-the-game/master/previews/pewpew-d-6.gif)
