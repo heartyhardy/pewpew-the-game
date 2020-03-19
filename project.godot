@@ -58,4 +58,5 @@ texture={
 [rendering]
 
 quality/2d/use_pixel_snap=true
+environment/default_clear_color=Color( 0.278431, 0.411765, 0.541176, 1 )
 environment/default_environment="res://default_env.tres"
