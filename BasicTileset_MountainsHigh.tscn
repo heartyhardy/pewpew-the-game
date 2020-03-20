@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://tiles/background-mountains-2.png" type="Texture" id=1]
+
+[node name="MountainsHigh" type="Node2D"]
+
+[node name="MountainTile" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 256, 96 )

@@ -1,0 +1,100 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://tiles/basic-tiles-foreground-v1.png" type="Texture" id=1]
+
+[node name="ForegroundTiles" type="Node2D"]
+
+[node name="BaseTile" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 32, 32, 32, 32 )
+
+[node name="MidLeftTile" type="Sprite" parent="."]
+position = Vector2( -40, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 32, 32, 32 )
+
+[node name="MidRightTile" type="Sprite" parent="."]
+position = Vector2( 40, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 64, 32, 32, 32 )
+
+[node name="TopLeftTile" type="Sprite" parent="."]
+position = Vector2( -40, -40 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 32, 32 )
+
+[node name="TopMidTile" type="Sprite" parent="."]
+position = Vector2( 0, -40 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 32, 0, 32, 32 )
+
+[node name="TopRightTile" type="Sprite" parent="."]
+position = Vector2( 40, -40 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 64, 0, 32, 32 )
+
+[node name="BotRightTile" type="Sprite" parent="."]
+position = Vector2( 40, 40 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 64, 64, 32, 32 )
+
+[node name="BotMidTile" type="Sprite" parent="."]
+position = Vector2( 0, 40 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 32, 64, 32, 32 )
+
+[node name="BotLeftTile" type="Sprite" parent="."]
+position = Vector2( -40, 40 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 64, 32, 32 )
+
+[node name="PlatformLeftTile" type="Sprite" parent="."]
+position = Vector2( -40, 80 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 96, 32, 32 )
+
+[node name="PlatformRightTile" type="Sprite" parent="."]
+position = Vector2( 40, 80 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 64, 96, 32, 32 )
+
+[node name="PlatformMidTile" type="Sprite" parent="."]
+position = Vector2( 0, 80 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 32, 96, 32, 32 )
+
+[node name="PillarTopTile" type="Sprite" parent="."]
+position = Vector2( 80, -40 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 96, 0, 32, 32 )
+
+[node name="PillarMidTile" type="Sprite" parent="."]
+position = Vector2( 80, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 96, 32, 32, 32 )
+
+[node name="PillarBotTile" type="Sprite" parent="."]
+position = Vector2( 80, 40 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 96, 64, 32, 32 )
+
+[node name="SingleTile" type="Sprite" parent="."]
+position = Vector2( 80, 80 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 96, 96, 32, 32 )
