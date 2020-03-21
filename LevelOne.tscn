@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://tilesets/basic_tileset_v1.tres" type="TileSet" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
@@ -9,6 +9,8 @@
 [ext_resource path="res://tilesets/basic_tileset_mountains_v1.tres" type="TileSet" id=7]
 [ext_resource path="res://tilesets/basic_tileset_mountainshigh_v1.tres" type="TileSet" id=8]
 [ext_resource path="res://tilesets/basic_tileset_foreground.tres" type="TileSet" id=9]
+[ext_resource path="res://tilesets/cloud_tileset_v1.tres" type="TileSet" id=10]
+[ext_resource path="res://tilesets/sky_lvl_1.tres" type="TileSet" id=11]
 
 [sub_resource type="CameraTexture" id=1]
 
@@ -71,6 +73,7 @@ follow_viewport_enable = true
 
 [node name="BlurTexture" type="TextureRect" parent="BlurLayer"]
 material = ExtResource( 6 )
+margin_top = -120.0
 margin_right = 320.0
 margin_bottom = 180.0
 texture = SubResource( 1 )
@@ -110,9 +113,34 @@ follow_viewport_enable = true
 follow_viewport_scale = 1.25
 
 [node name="TileMap" type="TileMap" parent="Foreground"]
-modulate = Color( 0.701961, 0.717647, 0.823529, 1 )
+modulate = Color( 0.533333, 0.545098, 0.635294, 1 )
+position = Vector2( 0, -5 )
 tile_set = ExtResource( 9 )
 cell_size = Vector2( 32, 32 )
 format = 1
-tile_data = PoolIntArray( 65555, 3, 0, 65556, 4, 0, 65557, 4, 0, 65558, 5, 0, 131090, 3, 0, 131091, 0, 0, 131092, 0, 0, 131093, 0, 0, 131094, 2, 0, 196617, 12, 0, 196626, 1, 0, 196627, 0, 0, 196628, 0, 0, 196629, 0, 0, 196630, 2, 0, 262147, 12, 0, 262153, 13, 0, 262160, 3, 0, 262161, 4, 0, 262162, 0, 0, 262163, 0, 0, 262164, 0, 0, 262165, 0, 0, 262166, 2, 0, 327683, 13, 0, 327689, 13, 0, 327696, 1, 0, 327697, 0, 0, 327698, 0, 0, 327699, 0, 0, 327700, 0, 0, 327701, 0, 0, 327702, 2, 0, 393219, 14, 0, 393225, 14, 0, 393232, 8, 0, 393233, 7, 0, 393234, 7, 0, 393235, 0, 0, 393236, 7, 0, 393237, 6, 0, 393238, 6, 0 )
+tile_data = PoolIntArray( 65555, 3, 0, 65556, 4, 0, 65557, 4, 0, 65558, 5, 0, 131090, 3, 0, 131091, 0, 0, 131092, 0, 0, 131093, 0, 0, 131094, 2, 0, 196617, 12, 0, 196626, 1, 0, 196627, 0, 0, 196628, 0, 0, 196629, 0, 0, 196630, 2, 0, 262147, 12, 0, 262153, 13, 0, 262154, 12, 0, 262160, 3, 0, 262161, 4, 0, 262162, 0, 0, 262163, 0, 0, 262164, 0, 0, 262165, 0, 0, 262166, 2, 0, 327683, 13, 0, 327689, 13, 0, 327690, 13, 0, 327692, 9, 0, 327693, 11, 0, 327694, 10, 0, 327696, 1, 0, 327697, 0, 0, 327698, 0, 0, 327699, 0, 0, 327700, 0, 0, 327701, 0, 0, 327702, 2, 0, 393219, 14, 0, 393225, 14, 0, 393226, 14, 0, 393232, 8, 0, 393233, 7, 0, 393234, 7, 0, 393235, 0, 0, 393236, 7, 0, 393237, 6, 0, 393238, 6, 0 )
+
+[node name="CloudLayer" type="CanvasLayer" parent="."]
+layer = -4
+follow_viewport_enable = true
+follow_viewport_scale = 0.35
+
+[node name="TileMap" type="TileMap" parent="CloudLayer"]
+modulate = Color( 0.827451, 0.807843, 0.67451, 0.72549 )
+scale = Vector2( 2, 2 )
+tile_set = ExtResource( 10 )
+format = 1
+tile_data = PoolIntArray( -65536, 0, 0, -65533, 3, 0, -65529, 0, 0, -65525, 3, 0, 1, 3, 0, 5, 0, 0, 6, 0, 0, 8, 3, 0 )
+
+[node name="Sky" type="CanvasLayer" parent="."]
+layer = -5
+follow_viewport_enable = true
+follow_viewport_scale = 0.25
+
+[node name="TileMap" type="TileMap" parent="Sky"]
+modulate = Color( 0.992157, 0.992157, 0.94902, 0.705882 )
+scale = Vector2( 6, 6 )
+tile_set = ExtResource( 11 )
+format = 1
+tile_data = PoolIntArray( -6, 0, 0, -1, 0, 0, -65532, 0, 0 )
 [connection signal="ready" from="Player" to="HUDLayer/HUD" method="_on_Player_ready"]

@@ -91,6 +91,10 @@ func _physics_process(delta):
 
 #ON TAKE DAMAGE SEE IF PLAYER IS ALIVE AND UPDATE HP
 func on_enemy_hit(dmg):
+	if !$PulseTween.is_active():
+		$PulseTween.interpolate_property(self,"modulate", Color.white, Color.red, 0.5, Tween.TRANS_SINE,Tween.EASE_OUT)
+		$PulseTween.start()
+		$PulseStopTimer.start()
 	reduce_from_armor(dmg)
 	PlayerGlobals.set_hp(hp)
 	if hp <= 0:
@@ -115,8 +119,12 @@ func reduce_from_armor(dmg):
 		armor = 0
 	PlayerGlobals.set_armor(armor)
 		
-
+		
+#WHEN PLAYER DIES DO THESE
 func on_player_death():
+	$PulseTween.stop(self)
+	$PulseStopTimer.stop()
+	self.modulate = Color.white
 	is_alive = false
 	$Player_Anim.play("Death")
 	
@@ -126,3 +134,9 @@ func _on_Player_Anim_animation_finished():
 	if !is_alive:
 		queue_free()
 	is_attacking = false
+
+
+func _on_PulseStopTimer_timeout():
+	$PulseTween.set_active(false)
+	self.modulate = Color.white
+	$PulseStopTimer.stop()

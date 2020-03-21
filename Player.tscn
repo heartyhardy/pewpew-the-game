@@ -98,4 +98,12 @@ limit_bottom = 180
 limit_smoothed = true
 smoothing_enabled = true
 smoothing_speed = 4.0
+
+[node name="PulseTween" type="Tween" parent="."]
+repeat = true
+playback/repeat = true
+
+[node name="PulseStopTimer" type="Timer" parent="."]
+wait_time = 3.0
 [connection signal="animation_finished" from="Player_Anim" to="." method="_on_Player_Anim_animation_finished"]
+[connection signal="timeout" from="PulseStopTimer" to="." method="_on_PulseStopTimer_timeout"]

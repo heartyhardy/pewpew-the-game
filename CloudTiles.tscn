@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://tiles/clouds-v1.png" type="Texture" id=1]
+
+[node name="CloudTiles" type="Node2D"]
+
+[node name="SmallCloud" type="Sprite" parent="."]
+position = Vector2( 48, -24 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 90, 42 )
+
+[node name="MediumCloud" type="Sprite" parent="."]
+position = Vector2( 168, -24 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 126, 90, 42 )
+
+[node name="LargeCloud" type="Sprite" parent="."]
+position = Vector2( 88, 24 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 84, 180, 42 )
+
+[node name="ExtraLargeCloud" type="Sprite" parent="."]
+position = Vector2( 88, 72 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 42, 180, 42 )
