@@ -9,7 +9,7 @@ var armor
 var ammo
 
 func _ready():
-	pass # Replace with function body.
+	pass
 	
 #GET PLAYER
 func get_player():

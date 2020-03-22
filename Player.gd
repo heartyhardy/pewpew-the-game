@@ -5,6 +5,10 @@ export(int) var hp = 100
 export(int) var armor = 50
 export(int) var ammo = 100
 
+export(int) var cam_right_limit
+export(int) var cam_top_limit
+export(int) var cam_bottom_limit
+
 const GRAVITY = 10
 const JUMP_FORCE = -250
 const FLOOR = Vector2(0, -1)
@@ -21,6 +25,10 @@ func _ready():
 	PlayerGlobals.set("hp", hp)
 	PlayerGlobals.set("armor", armor)
 	PlayerGlobals.set("ammo", ammo)
+	
+	$Player_Cam.limit_right = cam_right_limit
+	$Player_Cam.limit_top = cam_top_limit
+	$Player_Cam.limit_bottom = cam_bottom_limit
 
 func _physics_process(delta):
 	
