@@ -65,3 +65,23 @@ Pewpew is a simple 2D platformer with minimalistic styles
 
 
 ![](https://raw.githubusercontent.com/heartyhardy/pewpew-the-game/master/previews/pewpew-d-7.gif)
+
+
+## Day 8 - 21/03/2020
+* Created Sky, clouds and mountains in Piskel
+* Added them as parallax kayers
+* Created a new enemy in Piskel
+* Player now pulses in red color when damaged
+
+
+![](https://raw.githubusercontent.com/heartyhardy/pewpew-the-game/master/previews/pewpew-d-8.gif)
+
+
+## Day 9 - 22/03/2020
+* Introducing a new enemy: "Observer"
+* Added Move, Attack and Death animations of Observer
+* Added a bullet projectile for the new enemy
+* Todo: Enemy partially operational as the bullets still don't damage the player
+
+
+![](https://raw.githubusercontent.com/heartyhardy/pewpew-the-game/master/previews/pewpew-d-9.gif)
