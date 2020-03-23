@@ -85,3 +85,13 @@ Pewpew is a simple 2D platformer with minimalistic styles
 
 
 ![](https://raw.githubusercontent.com/heartyhardy/pewpew-the-game/master/previews/pewpew-d-9.gif)
+
+
+## Day 10 - 23/03/2020
+* "Observer" tank is now fully functional
+* Added Armor and HP bars
+* Synced fire effect to the attack animation
+* Drew a weaker enemy in Piskel
+
+
+![](https://raw.githubusercontent.com/heartyhardy/pewpew-the-game/master/previews/pewpew-d-10.gif)
