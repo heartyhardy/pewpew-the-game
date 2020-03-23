@@ -31,4 +31,5 @@ frame = 1
 shape = SubResource( 2 )
 
 [node name="Shell_Visibility" type="VisibilityNotifier2D" parent="."]
+[connection signal="body_entered" from="." to="." method="_on_ObserverShell_body_entered"]
 [connection signal="screen_exited" from="Shell_Visibility" to="." method="_on_Shell_Visibility_screen_exited"]

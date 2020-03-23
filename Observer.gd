@@ -5,16 +5,33 @@ const FLOOR = Vector2(0, -1)
 const SHELL = preload("res://ObserverShell.tscn")
 
 export(int) var speed = 40
+export(int) var armor = 100
+export(int) var damage = 65
+export(int) var shoot_speed = 50
+export(int) var hp = 200
 
 var velocity = Vector2()
 var direction = 1
 var is_attacking = false
+var is_alive = true
+
+onready var hpbar = $HealthBar
+onready var armorbar = $ArmorBar
 
 func _ready():
 	set_meta("TAG", "ENEMY")
-
+	hpbar.on_maxhp_updated(hp)
+	hpbar.on_hp_updated(hp)
+	armorbar.on_max_armor_updated(armor)
+	armorbar.on_armor_updated(armor)
+	
 
 func _physics_process(delta):
+	
+#	IF DEAD RETURN
+	if !is_alive:
+		return
+	
 #	MOVE NORMALLY IF NOT ATTACKING
 	if !is_attacking:
 		velocity.x = speed * direction
@@ -73,9 +90,26 @@ func turn():
 
 func fire():
 	var weapon_projectile = SHELL.instance()
+	weapon_projectile.damage = damage
+	weapon_projectile.speed = shoot_speed
 	weapon_projectile.set_direction(sign($ShootPoint.position.x))
 	get_parent().add_child(weapon_projectile)
 	weapon_projectile.position = $ShootPoint.global_position
+
+
+#ON HIT BY PLAYER
+func hit_by_player(dmg):
+	armor -= dmg
+	armorbar.on_armor_updated(armor)
+	if armor < 0:		
+		hp -= abs(armor)
+		armor = 0
+		hpbar.on_hp_updated(hp)
+		if hp < 0:
+			is_alive = false
+			$Observer_Hitbox.set_deferred("disabled", true)
+			$Observer_Ani.play("Death")
+
 
 #ON TIMEOUT STOP PLAYER AGGRESSION
 func _on_AggressionCooldown_timeout():
@@ -93,3 +127,8 @@ func _on_Observer_Ani_frame_changed():
 		elif $Observer_Ani.frame == 1:
 			$ObserverFireEffect/FireEffect.stop()
 			
+
+#IF ANIMATION ENDS
+func _on_Observer_Ani_animation_finished():
+	if !is_alive:
+		queue_free()

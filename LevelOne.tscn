@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://tilesets/basic_tileset_v1.tres" type="TileSet" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://tilesets/cloud_tileset_v1.tres" type="TileSet" id=10]
 [ext_resource path="res://tilesets/sky_lvl_1.tres" type="TileSet" id=11]
 [ext_resource path="res://Observer.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Grasshopper.tscn" type="PackedScene" id=13]
 
 [sub_resource type="CameraTexture" id=1]
 
@@ -48,6 +49,12 @@ position = Vector2( 504, 56 )
 
 [node name="Spidermine5" parent="." instance=ExtResource( 3 )]
 position = Vector2( 456, 152 )
+
+[node name="Observer" parent="." instance=ExtResource( 12 )]
+position = Vector2( 664, -32 )
+
+[node name="Grasshopper" parent="." instance=ExtResource( 13 )]
+position = Vector2( 288, 72 )
 
 [node name="BaseLayer" type="CanvasLayer" parent="."]
 layer = 0
@@ -148,7 +155,4 @@ scale = Vector2( 6, 6 )
 tile_set = ExtResource( 11 )
 format = 1
 tile_data = PoolIntArray( -6, 0, 0, -1, 0, 0, -65532, 0, 0 )
-
-[node name="Observer" parent="." instance=ExtResource( 12 )]
-position = Vector2( 664, -32 )
 [connection signal="ready" from="Player" to="HUDLayer/HUD" method="_on_Player_ready"]

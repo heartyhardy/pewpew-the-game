@@ -31,6 +31,11 @@ animations = [ {
 "name": "Death",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 19 ), ExtResource( 20 ), ExtResource( 21 ), ExtResource( 22 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 15 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 18 ) ],
+"loop": true,
+"name": "Explode",
+"speed": 25.0
+}, {
 "frames": [ ExtResource( 11 ), ExtResource( 10 ), ExtResource( 8 ), ExtResource( 9 ) ],
 "loop": true,
 "name": "Attack",
@@ -40,11 +45,6 @@ animations = [ {
 "loop": true,
 "name": "Patrol",
 "speed": 10.0
-}, {
-"frames": [ ExtResource( 19 ), ExtResource( 20 ), ExtResource( 21 ), ExtResource( 22 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 15 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 18 ) ],
-"loop": true,
-"name": "Explode",
-"speed": 25.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
