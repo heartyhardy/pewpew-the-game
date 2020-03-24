@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Grasshopper.gd" type="Script" id=1]
 [ext_resource path="res://sprites/grasshopper/grasshopper_death_1.png" type="Texture" id=2]
@@ -15,6 +15,7 @@
 [ext_resource path="res://sprites/grasshopper/grasshopper_death_4.png" type="Texture" id=13]
 [ext_resource path="res://sprites/grasshopper/grasshopper_death_5.png" type="Texture" id=14]
 [ext_resource path="res://sprites/grasshopper/grasshopper_death_6.png" type="Texture" id=15]
+[ext_resource path="res://HealthBar.tscn" type="PackedScene" id=16]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -59,3 +60,15 @@ cast_to = Vector2( 0, 10 )
 position = Vector2( 8.09404, -2.99779 )
 enabled = true
 cast_to = Vector2( 50, 0 )
+
+[node name="ShootPoint" type="Position2D" parent="."]
+position = Vector2( 9.6328, 2.32516 )
+
+[node name="HealthBar" parent="." instance=ExtResource( 16 )]
+margin_left = -8.0
+margin_top = -18.0
+margin_right = -8.0
+margin_bottom = -18.0
+rect_scale = Vector2( 0.3, 0.35 )
+[connection signal="animation_finished" from="Grasshopper_Anim" to="." method="_on_Grasshopper_Anim_animation_finished"]
+[connection signal="frame_changed" from="Grasshopper_Anim" to="." method="_on_Grasshopper_Anim_frame_changed"]

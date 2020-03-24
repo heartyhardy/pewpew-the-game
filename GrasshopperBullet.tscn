@@ -1,0 +1,34 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://GrasshopperBullet.gd" type="Script" id=1]
+[ext_resource path="res://sprites/grasshopper/grasshopper_bullet_3.png" type="Texture" id=2]
+[ext_resource path="res://sprites/grasshopper/grasshopper_bullet_1.png" type="Texture" id=3]
+[ext_resource path="res://sprites/grasshopper/grasshopper_bullet_0.png" type="Texture" id=4]
+[ext_resource path="res://sprites/grasshopper/grasshopper_bullet_2.png" type="Texture" id=5]
+[ext_resource path="res://sprites/grasshopper/grasshopper_bullet_4.png" type="Texture" id=6]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 4 ), ExtResource( 3 ), ExtResource( 5 ), ExtResource( 2 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "BulletFired",
+"speed": 15.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 2.18538, 1.43996 )
+
+[node name="GrasshopperBullet" type="Area2D"]
+script = ExtResource( 1 )
+
+[node name="Bullet_Anim" type="AnimatedSprite" parent="."]
+frames = SubResource( 1 )
+animation = "BulletFired"
+
+[node name="Bullet_Hitbox" type="CollisionShape2D" parent="."]
+position = Vector2( -0.678921, 0 )
+shape = SubResource( 2 )
+
+[node name="BulletVisibility" type="VisibilityNotifier2D" parent="."]
+[connection signal="body_entered" from="." to="." method="_on_GrasshopperBullet_body_entered"]
+[connection signal="screen_exited" from="BulletVisibility" to="." method="_on_BulletVisibility_screen_exited"]
