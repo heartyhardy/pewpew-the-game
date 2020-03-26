@@ -17,6 +17,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="BaseTile"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BaseTile/StaticBody2D"]
 shape = SubResource( 1 )
@@ -32,6 +34,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="MidTopTile"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MidTopTile/StaticBody2D"]
 shape = SubResource( 1 )
@@ -47,6 +51,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="MidLeftTile"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MidLeftTile/StaticBody2D"]
 shape = SubResource( 1 )
@@ -62,6 +68,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="TopLeftTile"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TopLeftTile/StaticBody2D"]
 shape = SubResource( 1 )
@@ -77,6 +85,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="SingleTile"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SingleTile/StaticBody2D"]
 shape = SubResource( 1 )
@@ -92,6 +102,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="HorizontalPlatformLeft"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HorizontalPlatformLeft/StaticBody2D"]
 shape = SubResource( 1 )
@@ -107,6 +119,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="HorizontalPlatformMid"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HorizontalPlatformMid/StaticBody2D"]
 shape = SubResource( 1 )
@@ -122,6 +136,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="HorizontalPlatformRight"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HorizontalPlatformRight/StaticBody2D"]
 shape = SubResource( 1 )
@@ -137,6 +153,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="VerticalPlatformTop"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VerticalPlatformTop/StaticBody2D"]
 shape = SubResource( 1 )
@@ -152,6 +170,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="VerticalPlatformMid"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VerticalPlatformMid/StaticBody2D"]
 shape = SubResource( 1 )
@@ -167,6 +187,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="VerticalPlatformBot"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VerticalPlatformBot/StaticBody2D"]
 shape = SubResource( 1 )
@@ -182,6 +204,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="MidRightTile"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MidRightTile/StaticBody2D"]
 shape = SubResource( 1 )
@@ -197,6 +221,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="BottomRightTile"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BottomRightTile/StaticBody2D"]
 shape = SubResource( 1 )
@@ -212,6 +238,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="MidBottomTile"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MidBottomTile/StaticBody2D"]
 shape = SubResource( 1 )
@@ -227,6 +255,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="BottomLeftTile"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BottomLeftTile/StaticBody2D"]
 shape = SubResource( 1 )
@@ -242,6 +272,8 @@ __meta__ = {
 
 [node name="StaticBody2D" type="StaticBody2D" parent="TopRightTile"]
 visible = false
+collision_layer = 32
+collision_mask = 25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TopRightTile/StaticBody2D"]
 shape = SubResource( 1 )

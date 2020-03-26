@@ -17,6 +17,8 @@ animations = [ {
 extents = Vector2( 3, 1 )
 
 [node name="RegularBullet" type="Area2D"]
+collision_layer = 8
+collision_mask = 34
 script = ExtResource( 4 )
 
 [node name="Bullet_Anim" type="AnimatedSprite" parent="."]

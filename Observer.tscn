@@ -27,11 +27,6 @@
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 8 ), ExtResource( 10 ), ExtResource( 5 ), ExtResource( 2 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 3 ), ExtResource( 4 ) ],
-"loop": true,
-"name": "Roll",
-"speed": 10.0
-}, {
 "frames": [ ExtResource( 17 ), ExtResource( 14 ), ExtResource( 16 ), ExtResource( 18 ), ExtResource( 20 ), ExtResource( 19 ), ExtResource( 15 ), ExtResource( 13 ) ],
 "loop": true,
 "name": "Death",
@@ -41,12 +36,18 @@ animations = [ {
 "loop": true,
 "name": "Attack",
 "speed": 4.0
+}, {
+"frames": [ ExtResource( 8 ), ExtResource( 10 ), ExtResource( 5 ), ExtResource( 2 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 3 ), ExtResource( 4 ) ],
+"loop": true,
+"name": "Roll",
+"speed": 10.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 7.13415, 4.5734 )
 
 [node name="Observer" type="KinematicBody2D"]
+collision_layer = 2
 script = ExtResource( 22 )
 
 [node name="Observer_Ani" type="AnimatedSprite" parent="."]

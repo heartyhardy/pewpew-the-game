@@ -1,0 +1,75 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://pickups/hp/pickup_hp_1.png" type="Texture" id=1]
+[ext_resource path="res://pickups/hp/pickup_hp_0.png" type="Texture" id=2]
+[ext_resource path="res://pickups/hp/pickup_hp_2.png" type="Texture" id=3]
+[ext_resource path="res://pickups/hp/pickup_hp_3.png" type="Texture" id=4]
+[ext_resource path="res://pickups/hp/pickup_hp_4.png" type="Texture" id=5]
+[ext_resource path="res://pickups/hp/pickup_hp_5.png" type="Texture" id=6]
+[ext_resource path="res://pickups/hp/pickup_hp_6.png" type="Texture" id=7]
+[ext_resource path="res://pickups/hp/pickup_hp_7.png" type="Texture" id=8]
+[ext_resource path="res://pickups/hp/pickup_hp_8.png" type="Texture" id=9]
+[ext_resource path="res://PickupHP.gd" type="Script" id=10]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 1 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "Active",
+"speed": 8.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 4.86489, 4.28817 )
+
+[sub_resource type="Animation" id=3]
+resource_name = "Bounce"
+length = 2.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Pickup_Anim:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2 ),
+"transitions": PoolRealArray( 0.5, 2, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -10 ), Vector2( 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Pickup_Hitbox:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1, 2 ),
+"transitions": PoolRealArray( 0.5, 2, 1 ),
+"update": 0,
+"values": [ Vector2( 0.398, 0 ), Vector2( 0.398, -10 ), Vector2( 0.398, 0 ) ]
+}
+
+[node name="PickupHP" type="Area2D"]
+scale = Vector2( 1.5, 1.5 )
+collision_layer = 4
+script = ExtResource( 10 )
+
+[node name="Pickup_Anim" type="AnimatedSprite" parent="."]
+position = Vector2( 0, -9.54034 )
+scale = Vector2( 1.5, 1.5 )
+z_index = -1
+frames = SubResource( 1 )
+animation = "Active"
+frame = 8
+playing = true
+
+[node name="Pickup_Hitbox" type="CollisionShape2D" parent="."]
+position = Vector2( 0.398, -9.54034 )
+shape = SubResource( 2 )
+
+[node name="BounceAnimation" type="AnimationPlayer" parent="."]
+playback_speed = 2.0
+anims/Bounce = SubResource( 3 )
+[connection signal="body_entered" from="." to="." method="_on_PickupHP_body_entered"]

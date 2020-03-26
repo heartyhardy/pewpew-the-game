@@ -19,6 +19,7 @@ animations = [ {
 extents = Vector2( 2.99568, 1.64264 )
 
 [node name="ObserverShell" type="Area2D"]
+collision_layer = 16
 script = ExtResource( 6 )
 speed = 65
 

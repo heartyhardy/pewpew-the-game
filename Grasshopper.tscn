@@ -39,6 +39,7 @@ animations = [ {
 extents = Vector2( 6.40328, 7.16093 )
 
 [node name="Grasshopper" type="KinematicBody2D"]
+collision_layer = 2
 script = ExtResource( 1 )
 
 [node name="Grasshopper_Anim" type="AnimatedSprite" parent="."]

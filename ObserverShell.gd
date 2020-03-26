@@ -14,9 +14,9 @@ func _ready():
 func set_direction(dir):
 	direction = dir
 	if direction == -1:
-		$Shell_Anim.flip_h = true
-	else:
 		$Shell_Anim.flip_h = false
+	else:
+		$Shell_Anim.flip_h = true
 
 
 func _physics_process(delta):

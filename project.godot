@@ -55,6 +55,15 @@ texture={
 "svg/scale": 1.0
 }
 
+[layer_names]
+
+2d_physics/layer_1="player"
+2d_physics/layer_2="enemies"
+2d_physics/layer_3="pickups"
+2d_physics/layer_4="player_projectiles"
+2d_physics/layer_5="enemy_projectiles"
+2d_physics/layer_6="base_platform"
+
 [rendering]
 
 quality/2d/use_pixel_snap=true
