@@ -20,6 +20,7 @@ var is_on_ground = false
 var is_attacking = false
 var is_ducked = false
 var is_alive = true
+var is_taking_damage = false
 
 func _ready():
 	PlayerGlobals.set("player", self)
@@ -38,7 +39,7 @@ func _physics_process(delta):
 		return
 	
 #	HORIZONTAL MOVEMENT
-	if Input.is_action_pressed("ui_right") and !is_ducked and is_alive:
+	if Input.is_action_pressed("ui_right") and !is_ducked and !is_taking_damage and is_alive:			
 		if !is_attacking or !is_on_floor():
 			velocity.x = speed
 			if !is_attacking:
@@ -46,7 +47,7 @@ func _physics_process(delta):
 				$Player_Anim.flip_h = false
 				if sign($ShootPoint.position.x)  == -1:
 					$ShootPoint.position.x *= -1
-	elif Input.is_action_pressed("ui_left") and !is_ducked and is_alive:
+	elif Input.is_action_pressed("ui_left") and !is_ducked and !is_taking_damage and is_alive:			
 		if !is_attacking or !is_on_floor():
 			velocity.x = -speed
 			if !is_attacking:
@@ -56,14 +57,16 @@ func _physics_process(delta):
 					$ShootPoint.position.x *= -1
 	else:
 		velocity.x = 0
-		if is_on_ground and !is_attacking and is_alive and !is_ducked:
+		if is_on_ground and !is_attacking and is_alive and !is_ducked and !is_taking_damage:
 			$Player_Anim.play("Idle")
-		if is_on_ground and !is_attacking and is_alive and is_ducked:
+		if is_on_ground and !is_attacking and is_alive and is_ducked and !is_taking_damage:
 			$Player_Anim.play("Duck")
 			
 	
 #	VERTICAL MOVEMENT
 	if Input.is_action_pressed("ui_up") and !is_ducked and is_on_ground and is_alive:
+		print_debug(is_attacking, " ", is_taking_damage, " ", is_on_ground)
+
 		if !is_attacking:
 			velocity.y = JUMP_FORCE
 			is_on_ground = false
@@ -93,6 +96,10 @@ func _physics_process(delta):
 		weapon_projectile.set_direction(sign($ShootPoint.position.x))
 		get_parent().add_child(weapon_projectile)
 		weapon_projectile.position = $ShootPoint.global_position
+		
+#	STOP ATTACK MODE
+	if Input.is_action_just_released("ui_select"):
+		is_attacking = false
 	
 #	PROCESSING GRAVITY
 	velocity.y += GRAVITY
@@ -128,7 +135,11 @@ func duck(enabled:bool)->void:
 		
 				
 #ON TAKE DAMAGE SEE IF PLAYER IS ALIVE AND UPDATE HP
-func on_enemy_hit(dmg):
+func on_enemy_hit(dmg, dodged:bool = false):
+	if dodged:
+		is_taking_damage = true
+		$Player_Anim.play("Dodge")
+		return
 	if !$PulseTween.is_active():
 		$PulseTween.interpolate_property(self,"modulate", Color.white, Color.red, 0.5, Tween.TRANS_SINE,Tween.EASE_OUT)
 		$PulseTween.start()
@@ -195,8 +206,10 @@ func play_pickup(initial:Color, target:Color, duration:float, animation: String)
 		
 #IS THE ANIMATION DONE?
 func _on_Player_Anim_animation_finished():
-#	if !is_alive:
-#		queue_free()
+	if is_taking_damage:
+		is_taking_damage = false
+	if !is_alive:
+		queue_free()
 	is_attacking = false
 
 

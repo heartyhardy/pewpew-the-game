@@ -22,6 +22,8 @@ config/icon="res://icon.png"
 [autoload]
 
 PlayerGlobals="*res://PlayerGlobals.tscn"
+Skills="*res://Skills.tscn"
+SkillChecks="*res://SkillChecks.tscn"
 
 [display]
 
