@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://tilesets/basic_tileset_v1.tres" type="TileSet" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
@@ -18,6 +18,8 @@
 [ext_resource path="res://PickupRegularAmmo.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Grass.tscn" type="PackedScene" id=17]
 [ext_resource path="res://Tree.tscn" type="PackedScene" id=18]
+[ext_resource path="res://Tree_Medium.tscn" type="PackedScene" id=19]
+[ext_resource path="res://Sheep.tscn" type="PackedScene" id=20]
 
 [sub_resource type="CameraTexture" id=1]
 
@@ -111,6 +113,20 @@ position = Vector2( 975.853, 144.087 )
 
 [node name="Tree8" parent="Trees" instance=ExtResource( 18 )]
 position = Vector2( 1039.36, 144.361 )
+
+[node name="Trees_Medium" type="Node2D" parent="."]
+
+[node name="Tree_Medium" parent="Trees_Medium" instance=ExtResource( 19 )]
+position = Vector2( 747.963, -47.6033 )
+
+[node name="Critters" type="Node2D" parent="."]
+
+[node name="Sheep" parent="Critters" instance=ExtResource( 20 )]
+position = Vector2( 140.166, 152.081 )
+
+[node name="Sheep2" parent="Critters" instance=ExtResource( 20 )]
+modulate = Color( 0.913725, 0.901961, 0.796078, 1 )
+position = Vector2( 165.884, 152.081 )
 
 [node name="Grass" type="Node2D" parent="."]
 

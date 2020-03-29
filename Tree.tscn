@@ -16,7 +16,7 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 12.7198, 13.0572 )
 
-[node name="Tree" type="Area2D"]
+[node name="Tree_Small" type="Area2D"]
 collision_layer = 128
 
 [node name="Tree_Anim" type="AnimatedSprite" parent="."]
