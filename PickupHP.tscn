@@ -62,7 +62,7 @@ scale = Vector2( 1.5, 1.5 )
 z_index = -1
 frames = SubResource( 1 )
 animation = "Active"
-frame = 8
+frame = 7
 playing = true
 
 [node name="Pickup_Hitbox" type="CollisionShape2D" parent="."]

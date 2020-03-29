@@ -65,6 +65,8 @@ texture={
 2d_physics/layer_4="player_projectiles"
 2d_physics/layer_5="enemy_projectiles"
 2d_physics/layer_6="base_platform"
+2d_physics/layer_7="grass"
+2d_physics/layer_8="trees"
 
 [rendering]
 

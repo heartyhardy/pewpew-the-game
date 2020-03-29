@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://tilesets/basic_tileset_v1.tres" type="TileSet" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
@@ -16,6 +16,8 @@
 [ext_resource path="res://PickupHP.tscn" type="PackedScene" id=14]
 [ext_resource path="res://PickupArmor.tscn" type="PackedScene" id=15]
 [ext_resource path="res://PickupRegularAmmo.tscn" type="PackedScene" id=16]
+[ext_resource path="res://Grass.tscn" type="PackedScene" id=17]
+[ext_resource path="res://Tree.tscn" type="PackedScene" id=18]
 
 [sub_resource type="CameraTexture" id=1]
 
@@ -38,47 +40,180 @@ cam_right_limit = 1280
 cam_top_limit = -180
 cam_bottom_limit = 180
 
-[node name="Spidermine" parent="." instance=ExtResource( 3 )]
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Spidermine" parent="Enemies" instance=ExtResource( 3 )]
 position = Vector2( 104, 72 )
 
-[node name="Spidermine2" parent="." instance=ExtResource( 3 )]
+[node name="Spidermine2" parent="Enemies" instance=ExtResource( 3 )]
 position = Vector2( 224, 144 )
 
-[node name="Spidermine4" parent="." instance=ExtResource( 3 )]
+[node name="Spidermine4" parent="Enemies" instance=ExtResource( 3 )]
 position = Vector2( 504, 56 )
 
-[node name="Spidermine5" parent="." instance=ExtResource( 3 )]
+[node name="Spidermine5" parent="Enemies" instance=ExtResource( 3 )]
 position = Vector2( 456, 152 )
 
-[node name="Observer" parent="." instance=ExtResource( 12 )]
+[node name="Observer" parent="Enemies" instance=ExtResource( 12 )]
 position = Vector2( 664, -32 )
 
-[node name="Grasshopper" parent="." instance=ExtResource( 13 )]
+[node name="Grasshopper" parent="Enemies" instance=ExtResource( 13 )]
 position = Vector2( 280, 72 )
 
-[node name="Grasshopper2" parent="." instance=ExtResource( 13 )]
+[node name="Grasshopper2" parent="Enemies" instance=ExtResource( 13 )]
 position = Vector2( 1032, 152 )
 
-[node name="Grasshopper3" parent="." instance=ExtResource( 13 )]
+[node name="Grasshopper3" parent="Enemies" instance=ExtResource( 13 )]
 position = Vector2( 1096, 120 )
 hp = 45
 
-[node name="Grasshopper4" parent="." instance=ExtResource( 13 )]
+[node name="Grasshopper4" parent="Enemies" instance=ExtResource( 13 )]
 position = Vector2( 1208, 152 )
 hp = 45
 
-[node name="PickupHP" parent="." instance=ExtResource( 14 )]
+[node name="Pickups" type="Node2D" parent="."]
+
+[node name="PickupHP" parent="Pickups" instance=ExtResource( 14 )]
 position = Vector2( 1058.93, 152.5 )
 hp_gain = 50
 
-[node name="PickupArmor" parent="." instance=ExtResource( 15 )]
+[node name="PickupArmor" parent="Pickups" instance=ExtResource( 15 )]
 position = Vector2( 590.734, 22.9053 )
 scale = Vector2( 1.5, 1.5 )
 armor_gain = 100
 
-[node name="PickupRegularAmmo" parent="." instance=ExtResource( 16 )]
+[node name="PickupRegularAmmo" parent="Pickups" instance=ExtResource( 16 )]
 position = Vector2( 497.721, 152.667 )
 scale = Vector2( 1.5, 1.5 )
+
+[node name="Trees" type="Node2D" parent="."]
+
+[node name="Tree" parent="Trees" instance=ExtResource( 18 )]
+position = Vector2( 162.826, 143.964 )
+
+[node name="Tree2" parent="Trees" instance=ExtResource( 18 )]
+position = Vector2( 64.2119, 143.809 )
+
+[node name="Tree3" parent="Trees" instance=ExtResource( 18 )]
+position = Vector2( 556.319, 17.0331 )
+
+[node name="Tree4" parent="Trees" instance=ExtResource( 18 )]
+position = Vector2( 672.043, -31.9524 )
+
+[node name="Tree5" parent="Trees" instance=ExtResource( 18 )]
+position = Vector2( 719.814, -31.8975 )
+
+[node name="Tree6" parent="Trees" instance=ExtResource( 18 )]
+position = Vector2( 783.789, -31.4218 )
+
+[node name="Tree7" parent="Trees" instance=ExtResource( 18 )]
+position = Vector2( 975.853, 144.087 )
+
+[node name="Tree8" parent="Trees" instance=ExtResource( 18 )]
+position = Vector2( 1039.36, 144.361 )
+
+[node name="Grass" type="Node2D" parent="."]
+
+[node name="Grass" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 291.006, 72.2693 )
+
+[node name="Grass2" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 307.791, 72.2313 )
+grass_type = 4
+
+[node name="Grass3" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 329.951, 71.781 )
+grass_type = 4
+
+[node name="Grass4" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 345.926, 72.3303 )
+
+[node name="Grass5" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 405.962, 88.1634 )
+
+[node name="Grass10" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 485.124, 152.056 )
+grass_type = 3
+
+[node name="Grass11" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 468.341, 152.231 )
+
+[node name="Grass12" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 570.088, 24.0156 )
+grass_type = 2
+
+[node name="Grass13" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 605.904, 23.7001 )
+grass_type = 2
+
+[node name="Grass14" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 691.048, -24.1603 )
+grass_type = 2
+
+[node name="Grass15" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 707.535, -23.8605 )
+
+[node name="Grass16" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 730.141, -24.1292 )
+grass_type = 4
+
+[node name="Grass17" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 765.044, -23.9303 )
+
+[node name="Grass18" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 781.849, -23.8308 )
+grass_type = 2
+
+[node name="Grass19" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 802.831, -24.0297 )
+
+[node name="Grass20" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 933.965, 72.0965 )
+
+[node name="Grass21" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 921.841, 151.982 )
+
+[node name="Grass22" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 906.229, 151.982 )
+
+[node name="Grass23" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 938.119, 152.038 )
+grass_type = 4
+
+[node name="Grass24" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 962.879, 152.237 )
+grass_type = 2
+
+[node name="Grass25" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 986.048, 151.938 )
+grass_type = 4
+
+[node name="Grass26" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 1077.9, 152.082 )
+
+[node name="Grass27" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 1061.93, 152.082 )
+
+[node name="Grass28" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 1018.1, 152.205 )
+grass_type = 2
+
+[node name="Grass29" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 1002.11, 152.327 )
+grass_type = 2
+
+[node name="Grass6" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 73.9508, 151.943 )
+
+[node name="Grass7" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 52.0246, 151.943 )
+
+[node name="Grass8" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 153.943, 151.943 )
+grass_type = 2
+
+[node name="Grass9" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 178.669, 152.117 )
 
 [node name="BaseLayer" type="CanvasLayer" parent="."]
 layer = 0

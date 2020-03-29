@@ -9,7 +9,7 @@ var skills = {
 
 #SKILL STATUS
 var skill_status = {
-	"DODGE": true
+	"DODGE": false
 }
 
 

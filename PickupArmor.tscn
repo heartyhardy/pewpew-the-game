@@ -59,7 +59,7 @@ script = ExtResource( 3 )
 scale = Vector2( 1.5, 1.5 )
 frames = SubResource( 1 )
 animation = "Active"
-frame = 7
+frame = 5
 playing = true
 
 [node name="Pickup_Hitbox" type="CollisionShape2D" parent="."]

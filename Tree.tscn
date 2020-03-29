@@ -1,0 +1,32 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://environment/trees/tree_short_0.png" type="Texture" id=1]
+[ext_resource path="res://environment/trees/tree_short_3.png" type="Texture" id=2]
+[ext_resource path="res://environment/trees/tree_short_1.png" type="Texture" id=3]
+[ext_resource path="res://environment/trees/tree_short_2.png" type="Texture" id=4]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 2 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 4.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 12.7198, 13.0572 )
+
+[node name="Tree" type="Area2D"]
+collision_layer = 128
+
+[node name="Tree_Anim" type="AnimatedSprite" parent="."]
+scale = Vector2( 2, 2 )
+z_index = -2
+frames = SubResource( 1 )
+animation = "Idle"
+frame = 3
+playing = true
+
+[node name="Tree_Hitbox" type="CollisionShape2D" parent="."]
+position = Vector2( 0.291985, 3.50383 )
+shape = SubResource( 2 )

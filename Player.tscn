@@ -169,6 +169,9 @@ visible = false
 scale = Vector2( 2, 2 )
 frames = SubResource( 4 )
 animation = "AmmoPicked"
+
+[node name="ShootCDTimer" type="Timer" parent="."]
+one_shot = true
 [connection signal="animation_finished" from="Player_Anim" to="." method="_on_Player_Anim_animation_finished"]
 [connection signal="timeout" from="PulseStopTimer" to="." method="_on_PulseStopTimer_timeout"]
 [connection signal="timeout" from="PickupStopTimer" to="." method="_on_PickupStopTimer_timeout"]

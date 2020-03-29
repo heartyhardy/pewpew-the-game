@@ -9,6 +9,8 @@ export(int) var cam_right_limit
 export(int) var cam_top_limit
 export(int) var cam_bottom_limit
 
+export(float) var weapon_cooldown = 0.25
+
 const GRAVITY = 10
 const JUMP_FORCE = -250
 const FLOOR = Vector2(0, -1)
@@ -31,6 +33,8 @@ func _ready():
 	$Player_Cam.limit_right = cam_right_limit
 	$Player_Cam.limit_top = cam_top_limit
 	$Player_Cam.limit_bottom = cam_bottom_limit
+	
+	$ShootCDTimer.wait_time = weapon_cooldown
 
 func _physics_process(delta):
 	
@@ -65,8 +69,6 @@ func _physics_process(delta):
 	
 #	VERTICAL MOVEMENT
 	if Input.is_action_pressed("ui_up") and !is_ducked and is_on_ground and is_alive:
-		print_debug(is_attacking, " ", is_taking_damage, " ", is_on_ground)
-
 		if !is_attacking:
 			velocity.y = JUMP_FORCE
 			is_on_ground = false
@@ -82,6 +84,9 @@ func _physics_process(delta):
 		
 #	SHOOT IF PLAYER HAS AMMO
 	if Input.is_action_just_pressed("ui_select") and !is_attacking and is_alive:
+		if !$ShootCDTimer.is_stopped():
+			return
+			
 		if ammo <= 0:
 			return
 		if is_on_floor():
@@ -96,6 +101,7 @@ func _physics_process(delta):
 		weapon_projectile.set_direction(sign($ShootPoint.position.x))
 		get_parent().add_child(weapon_projectile)
 		weapon_projectile.position = $ShootPoint.global_position
+		$ShootCDTimer.start()
 		
 #	STOP ATTACK MODE
 	if Input.is_action_just_released("ui_select"):
@@ -124,11 +130,13 @@ func _physics_process(delta):
 func duck(enabled:bool)->void:
 	if enabled:
 		is_ducked = true
+		Skills.enable_skill("DODGE")
 		$Player_Hitbox.set_deferred("disabled", true)
 		$Player_Duckbox.set_deferred("disabled", false)
 		$ShootPoint.position.y = 1
 	else:
 		is_ducked = false
+		Skills.disable_skill("DODGE")
 		$Player_Hitbox.set_deferred("disabled", false)
 		$Player_Duckbox.set_deferred("disabled", true)
 		$ShootPoint.position.y = -1
