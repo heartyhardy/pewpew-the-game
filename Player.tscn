@@ -172,7 +172,10 @@ animation = "AmmoPicked"
 
 [node name="ShootCDTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="WaterSplashTimer" type="Timer" parent="."]
 [connection signal="animation_finished" from="Player_Anim" to="." method="_on_Player_Anim_animation_finished"]
 [connection signal="timeout" from="PulseStopTimer" to="." method="_on_PulseStopTimer_timeout"]
 [connection signal="timeout" from="PickupStopTimer" to="." method="_on_PickupStopTimer_timeout"]
 [connection signal="animation_finished" from="Pick_Anim" to="." method="_on_Pick_Anim_animation_finished"]
+[connection signal="timeout" from="WaterSplashTimer" to="." method="_on_WaterSplashTimer_timeout"]

@@ -1,9 +1,30 @@
-[gd_resource type="TileSet" load_steps=3 format=2]
+[gd_resource type="TileSet" load_steps=10 format=2]
 
 [ext_resource path="res://tiles/basic-tiles-v1.png" type="Texture" id=1]
+[ext_resource path="res://environment/water/default/water_base_0.png" type="Texture" id=2]
+[ext_resource path="res://environment/water/default/water_base_1.png" type="Texture" id=3]
+[ext_resource path="res://environment/water/default/water_base_2.png" type="Texture" id=4]
+[ext_resource path="res://environment/water/default/water_base_3.png" type="Texture" id=5]
+[ext_resource path="res://environment/water/default/water_base_4.png" type="Texture" id=6]
+[ext_resource path="res://environment/water/default/water_base_5.png" type="Texture" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
+
+[sub_resource type="AnimatedTexture" id=2]
+frames = 6
+fps = 5.0
+frame_0/texture = ExtResource( 2 )
+frame_1/texture = ExtResource( 3 )
+frame_1/delay_sec = 0.0
+frame_2/texture = ExtResource( 4 )
+frame_2/delay_sec = 0.0
+frame_3/texture = ExtResource( 5 )
+frame_3/delay_sec = 0.0
+frame_4/texture = ExtResource( 6 )
+frame_4/delay_sec = 0.0
+frame_5/texture = ExtResource( 7 )
+frame_5/delay_sec = 0.0
 
 [resource]
 0/name = "BaseTile"
@@ -262,3 +283,13 @@ extents = Vector2( 8, 8 )
 "shape_transform": Transform2D( 1, 0, 0, 1, 8, 8 )
 } ]
 15/z_index = 0
+16/name = "water_base_0.png 16"
+16/texture = SubResource( 2 )
+16/tex_offset = Vector2( 0, 0 )
+16/modulate = Color( 1, 1, 1, 0.764706 )
+16/region = Rect2( 0, 0, 16, 16 )
+16/tile_mode = 0
+16/occluder_offset = Vector2( 0, 0 )
+16/navigation_offset = Vector2( 0, 0 )
+16/shapes = [  ]
+16/z_index = 0

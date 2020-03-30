@@ -5,7 +5,7 @@ const GRAVITY = 10
 const FLOOR = Vector2(0, -1)
 
 var STATES = ["Idle", "Walk"]
-var TIMES = [10, 2]
+var TIMES = [15, 2]
 
 var velocity = Vector2()
 var direction = 1
@@ -27,6 +27,7 @@ func pick_random_state() -> int:
 #TURN IF COLLIDED WITH A WALL
 func turn():
 	direction *= -1
+	$LedgeDetectRay.position.x *= -1
 	
 
 func _physics_process(delta):
@@ -46,6 +47,8 @@ func _physics_process(delta):
 	if is_on_wall():
 		turn()
 	
+	if !$LedgeDetectRay.is_colliding():
+		turn()
 
 #PICK A RANDOM STATE AND CHANGE TIMEOUT ACCORDINGLY
 func _on_StateTimer_timeout():

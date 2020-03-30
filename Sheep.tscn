@@ -46,4 +46,9 @@ shape = SubResource( 2 )
 
 [node name="StateTimer" type="Timer" parent="."]
 wait_time = 10.0
+
+[node name="LedgeDetectRay" type="RayCast2D" parent="."]
+position = Vector2( 7.12748, 0 )
+enabled = true
+cast_to = Vector2( 0, 10 )
 [connection signal="timeout" from="StateTimer" to="." method="_on_StateTimer_timeout"]

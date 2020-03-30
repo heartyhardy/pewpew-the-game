@@ -16,6 +16,7 @@ const JUMP_FORCE = -250
 const FLOOR = Vector2(0, -1)
 
 const REGULAR_BULLET = preload("res://RegularBullet.tscn")
+const WATER_SPLASH = preload("res://WaterSplash.tscn")
 
 var velocity = Vector2()
 var is_on_ground = false
@@ -23,6 +24,7 @@ var is_attacking = false
 var is_ducked = false
 var is_alive = true
 var is_taking_damage = false
+var is_water_splashed = false
 
 func _ready():
 	PlayerGlobals.set("player", self)
@@ -124,7 +126,20 @@ func _physics_process(delta):
 				$Player_Anim.play("Fall")
 		
 	velocity = move_and_slide(velocity, FLOOR)
-
+	
+#	WATER SPLASH ON CONTACT
+	if !is_water_splashed:
+		var collision_pos = self.global_position
+		var tilemap = get_parent().get_node("BaseLayer/TileMap") as TileMap
+		var tile = tilemap.get_cellv(tilemap.world_to_map(collision_pos))	
+		if abs(tile) == 16 and !is_on_floor():
+			is_water_splashed = true
+			var spawn = WATER_SPLASH.instance()
+			get_parent().add_child(spawn)
+	#		var v2 = Vector2(collision_pos.x, collision_pos.y - 10)
+			var v2 = Vector2(self.transform.get_origin().x, self.transform.get_origin().y - 6)
+			spawn.position = v2
+		$WaterSplashTimer.start()
 
 #SET DUCK ON/OFF
 func duck(enabled:bool)->void:
@@ -238,3 +253,7 @@ func _on_PickupStopTimer_timeout():
 func _on_Pick_Anim_animation_finished():
 	$Pick_Anim.stop()
 	$Pick_Anim.visible = false
+
+
+func _on_WaterSplashTimer_timeout():
+	is_water_splashed = false
