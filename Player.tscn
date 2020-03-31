@@ -106,14 +106,14 @@ animations = [ {
 "name": "AmmoPicked",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 25 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 30 ), ExtResource( 27 ), ExtResource( 25 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 30 ), ExtResource( 27 ), ExtResource( 29 ), ExtResource( 29 ) ],
-"loop": true,
-"name": "HPPicked",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 31 ), ExtResource( 35 ), ExtResource( 36 ), ExtResource( 32 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 31 ), ExtResource( 35 ), ExtResource( 36 ), ExtResource( 32 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 34 ) ],
 "loop": true,
 "name": "ArmorPicked",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 25 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 30 ), ExtResource( 27 ), ExtResource( 25 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 30 ), ExtResource( 27 ), ExtResource( 29 ), ExtResource( 29 ) ],
+"loop": true,
+"name": "HPPicked",
 "speed": 5.0
 } ]
 

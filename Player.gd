@@ -25,6 +25,8 @@ var is_ducked = false
 var is_alive = true
 var is_taking_damage = false
 var is_water_splashed = false
+var is_grass_dodge_active = false
+var is_tree_heal_active = false
 
 func _ready():
 	PlayerGlobals.set("player", self)
@@ -158,8 +160,9 @@ func duck(enabled:bool)->void:
 		
 				
 #ON TAKE DAMAGE SEE IF PLAYER IS ALIVE AND UPDATE HP
-func on_enemy_hit(dmg, dodged:bool = false):
+func on_enemy_hit(dmg, dodged:bool = false, hit_direction = 0):
 	if dodged:
+		turn_towards_enemy(hit_direction)
 		is_taking_damage = true
 		$Player_Anim.play("Dodge")
 		return
@@ -226,7 +229,25 @@ func play_pickup(initial:Color, target:Color, duration:float, animation: String)
 				$Pick_Anim.visible = true
 				$Pick_Anim.play(animation)
 
+
+#ON REGEN HP
+func on_regen(amount):
+	var current_hp = PlayerGlobals.get_hp()
+	if current_hp < 100:
+		PlayerGlobals.set_hp(current_hp + amount)
+		hp = PlayerGlobals.get_hp()
 		
+
+#WHEN DODGED, TURN TOWARDS ENEMY ATTACK
+func turn_towards_enemy(hit_direction):
+	if hit_direction == sign($ShootPoint.position.x):
+		if $Player_Anim.flip_h:
+			$Player_Anim.flip_h = false
+		elif !$Player_Anim.flip_h:
+			$Player_Anim.flip_h = true
+		$ShootPoint.position.x *= -1
+	
+					
 #IS THE ANIMATION DONE?
 func _on_Player_Anim_animation_finished():
 	if is_taking_damage:

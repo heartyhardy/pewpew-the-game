@@ -2,7 +2,14 @@ March 29, 2020
 
 Features to be implemented
 
-1. Turn to enemy direction when dodging
-2. When on grass, increase dodge precentage
-3. When under a medium-large tree, heal a tiny amount per second
-4. Sheep random funny stuff
+1. Turn to enemy direction when dodging **DONE**
+2. When on grass, increase dodge precentage **DONE**
+3. When under a medium-large tree, heal a tiny amount per second *DONE*
+4. Secret tiles/ Secret doors **DONE**
+5. Optional max heal for Medium Tree **DONE**
+6. Sheep random funny stuff
+7. Underwater sub region and player functionalities
+8. First NPC to teach dodge skill
+9. Melee attack
+10. Fire attack and set environment on fire
+11. Think about funny stuff to add to game 

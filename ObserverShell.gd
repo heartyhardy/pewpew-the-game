@@ -38,7 +38,7 @@ func _on_ObserverShell_body_entered(body):
 			if !is_dodged:
 				body.on_enemy_hit(damage)
 			else:
-				body.on_enemy_hit(0, true)
+				body.on_enemy_hit(0, true, direction)
 				return
 		else:
 			body.on_enemy_hit(damage)
