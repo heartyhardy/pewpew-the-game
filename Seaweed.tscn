@@ -1,0 +1,35 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://environment/underwater/seaweed/underwater_plant_default_6.png" type="Texture" id=1]
+[ext_resource path="res://environment/underwater/seaweed/underwater_plant_default_0.png" type="Texture" id=2]
+[ext_resource path="res://environment/underwater/seaweed/underwater_plant_default_2.png" type="Texture" id=3]
+[ext_resource path="res://environment/underwater/seaweed/underwater_plant_default_1.png" type="Texture" id=4]
+[ext_resource path="res://environment/underwater/seaweed/underwater_plant_default_3.png" type="Texture" id=5]
+[ext_resource path="res://environment/underwater/seaweed/underwater_plant_default_4.png" type="Texture" id=6]
+[ext_resource path="res://environment/underwater/seaweed/underwater_plant_default_5.png" type="Texture" id=7]
+[ext_resource path="res://Seaweed.gd" type="Script" id=8]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 4 ), ExtResource( 3 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 7.75195, 12.7657 )
+
+[node name="Seaweed" type="Area2D"]
+collision_layer = 128
+script = ExtResource( 8 )
+
+[node name="Seaweed_Anim" type="AnimatedSprite" parent="."]
+frames = SubResource( 1 )
+animation = "Idle"
+frame = 4
+playing = true
+
+[node name="Seaweed_Hitbox" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 3.00491 )
+shape = SubResource( 2 )

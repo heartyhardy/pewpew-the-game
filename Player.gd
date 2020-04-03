@@ -1,24 +1,29 @@
 extends KinematicBody2D
 
 export(int) var speed = 30
+export(int) var swim_speed = 20
 export(int) var hp = 100
 export(int) var armor = 50
 export(int) var ammo = 100
 
-export(int) var cam_right_limit
-export(int) var cam_top_limit
-export(int) var cam_bottom_limit
+export(float) var weapon_cooldown = 0.35
+export(float) var melee_cooldown = 0.3
 
-export(float) var weapon_cooldown = 0.25
+export(int) var buoyancy = 5
 
 const GRAVITY = 10
 const JUMP_FORCE = -250
 const FLOOR = Vector2(0, -1)
 
 const REGULAR_BULLET = preload("res://RegularBullet.tscn")
+const REGULAR_PUNCH = preload("res://MeleeDefaultPunch.tscn")
 const WATER_SPLASH = preload("res://WaterSplash.tscn")
 
 var velocity = Vector2()
+var submerged_velocity = Vector2()
+
+var attack_mode = AttackMode.get_attack_mode()
+
 var is_on_ground = false
 var is_attacking = false
 var is_ducked = false
@@ -27,18 +32,34 @@ var is_taking_damage = false
 var is_water_splashed = false
 var is_grass_dodge_active = false
 var is_tree_heal_active = false
+var is_submerged = false
+
 
 func _ready():
+
 	PlayerGlobals.set("player", self)
 	PlayerGlobals.set("hp", hp)
 	PlayerGlobals.set("armor", armor)
 	PlayerGlobals.set("ammo", ammo)
 	
-	$Player_Cam.limit_right = cam_right_limit
-	$Player_Cam.limit_top = cam_top_limit
-	$Player_Cam.limit_bottom = cam_bottom_limit
+	var tilemap_rect = get_parent().get_node("BaseLayer/TileMap").get_used_rect()
+	var cell_size = get_parent().get_node("BaseLayer/TileMap").cell_size	
+	
+	$Player_Cam.limit_left = tilemap_rect.position.x * cell_size.x
+	$Player_Cam.limit_right = tilemap_rect.end.x * cell_size.x
+	$Player_Cam.limit_top = (tilemap_rect.position.y - 32) * cell_size.y
+	$Player_Cam.limit_bottom = tilemap_rect.end.y * cell_size.y
 	
 	$ShootCDTimer.wait_time = weapon_cooldown
+	$MeleeCDTimer.wait_time = melee_cooldown
+
+
+#INPUT EVENTS
+func _input(event: InputEvent):
+	if event is InputEventKey and event.pressed:
+		if event.scancode == KEY_V:
+			attack_mode = AttackMode.cycle_attack_mode()
+		
 
 func _physics_process(delta):
 	
@@ -46,29 +67,79 @@ func _physics_process(delta):
 	if !is_alive and is_on_floor():
 		return
 	
+#	DETERMINE THE TILE PLAYER IS SITTING ON CURRENTLY
+	var tile = get_colliding_tile()
+	if tile[0] >= 19:
+		is_submerged = true
+		submerged_velocity.x = 0
+		submerged_velocity.y = buoyancy
+	elif tile[0] == -1:
+		is_submerged = false
+		
+		
+	
+#	GROUND MOVEMENT
+	if !is_submerged:
+		handle_ground_movement()
+	elif is_submerged:		
+#	UNDERWATER MOVEMENT	
+		handle_underwater_movement(tile)
+			
+	
+#	WATER SPLASH ON CONTACT
+	water_splash()
+
+
+#WATER SPLASH
+func water_splash():
+	if is_water_splashed:
+		return
+		
+	var tile = get_colliding_tile()
+	if tile[0] in [16, 19] and !is_on_floor():
+		is_water_splashed = true
+		print_debug(tile[1].x, tile[2].cell_size, tile[2].position.y)
+		var splash_pos = Vector2((tile[1].x * tile[2].cell_size.x)
+		 + tile[2].cell_size.x/2, (tile[1].y * tile[2].cell_size.y) - 6)
+		var splash = WATER_SPLASH.instance()
+		get_parent().add_child(splash)
+		splash.position = splash_pos
+	$WaterSplashTimer.start()
+		
+		
+		
+#GROUND MOVEMENT HANDLER
+func handle_ground_movement():
+#	HIDE BUBBLES
+	if $Bubbles_Anim.visible:
+		$Bubbles_Anim.stop()
+		$Bubbles_Anim.visible = false
+	
 #	HORIZONTAL MOVEMENT
 	if Input.is_action_pressed("ui_right") and !is_ducked and !is_taking_damage and is_alive:			
 		if !is_attacking or !is_on_floor():
 			velocity.x = speed
 			if !is_attacking:
-				$Player_Anim.play("Run")
+				$Player_Anim.play(Animations.get_animation("RUN", attack_mode))
 				$Player_Anim.flip_h = false
 				if sign($ShootPoint.position.x)  == -1:
 					$ShootPoint.position.x *= -1
+					$MeleeHitPoint.position.x *= -1
 	elif Input.is_action_pressed("ui_left") and !is_ducked and !is_taking_damage and is_alive:			
 		if !is_attacking or !is_on_floor():
 			velocity.x = -speed
 			if !is_attacking:
-				$Player_Anim.play("Run")
+				$Player_Anim.play(Animations.get_animation("RUN", attack_mode))
 				$Player_Anim.flip_h = true
 				if sign($ShootPoint.position.x) == 1:
 					$ShootPoint.position.x *= -1
+					$MeleeHitPoint.position.x *= -1
 	else:
 		velocity.x = 0
 		if is_on_ground and !is_attacking and is_alive and !is_ducked and !is_taking_damage:
-			$Player_Anim.play("Idle")
+			$Player_Anim.play(Animations.get_animation("IDLE", attack_mode))
 		if is_on_ground and !is_attacking and is_alive and is_ducked and !is_taking_damage:
-			$Player_Anim.play("Duck")
+			$Player_Anim.play(Animations.get_animation("DUCK", attack_mode))
 			
 	
 #	VERTICAL MOVEMENT
@@ -81,35 +152,29 @@ func _physics_process(delta):
 		if !is_ducked:
 			velocity.x = 0
 			duck(true)
-			$Player_Anim.play("Duck")
+			$Player_Anim.play(Animations.get_animation("DUCK", attack_mode))
 		elif is_ducked:
 			duck(false)
 
 		
 #	SHOOT IF PLAYER HAS AMMO
 	if Input.is_action_just_pressed("ui_select") and !is_attacking and is_alive:
-		if !$ShootCDTimer.is_stopped():
+#		IF ATTACK MODE IS MELEE
+		if attack_mode == 1:
+			handle_melee_attacks()
 			return
-			
-		if ammo <= 0:
+#		IF ATTACK MODE IS GUN
+		if attack_mode == 2:
+			handle_gun_attacks()
 			return
-		if is_on_floor():
-			velocity.x = 0
-		is_attacking = true
-		reduce_one_from_ammo()
-		if is_ducked:
-			$Player_Anim.play("DuckShoot")
-		else:
-			$Player_Anim.play("Shoot")
-		var weapon_projectile = REGULAR_BULLET.instance()
-		weapon_projectile.set_direction(sign($ShootPoint.position.x))
-		get_parent().add_child(weapon_projectile)
-		weapon_projectile.position = $ShootPoint.global_position
-		$ShootCDTimer.start()
+		
 		
 #	STOP ATTACK MODE
 	if Input.is_action_just_released("ui_select"):
-		is_attacking = false
+		if $Player_Anim.animation == "Shoot" or $Player_Anim.animation == "MeleeAttack":
+			if !$Player_Anim.playing:
+				is_attacking = false
+		
 	
 #	PROCESSING GRAVITY
 	velocity.y += GRAVITY
@@ -123,25 +188,115 @@ func _physics_process(delta):
 		if !is_attacking and is_alive:
 			is_on_ground = false
 			if velocity.y < 0:
-				$Player_Anim.play("Jump")
+				$Player_Anim.play(Animations.get_animation("JUMP", attack_mode))
 			else:
-				$Player_Anim.play("Fall")
+				$Player_Anim.play(Animations.get_animation("FALL", attack_mode))
 		
 	velocity = move_and_slide(velocity, FLOOR)
+
+
+#UNDERWATERMOVEMENT HANDLER
+func handle_underwater_movement(collided_tile: Array):
+#	SHOW BUBBLES
+	if !$Bubbles_Anim.visible:
+		$Bubbles_Anim.visible = true
+		$Bubbles_Anim.play("Bubbles")
 	
-#	WATER SPLASH ON CONTACT
-	if !is_water_splashed:
-		var collision_pos = self.global_position
-		var tilemap = get_parent().get_node("BaseLayer/TileMap") as TileMap
-		var tile = tilemap.get_cellv(tilemap.world_to_map(collision_pos))	
-		if abs(tile) == 16 and !is_on_floor():
-			is_water_splashed = true
-			var spawn = WATER_SPLASH.instance()
-			get_parent().add_child(spawn)
-	#		var v2 = Vector2(collision_pos.x, collision_pos.y - 10)
-			var v2 = Vector2(self.transform.get_origin().x, self.transform.get_origin().y - 6)
-			spawn.position = v2
-		$WaterSplashTimer.start()
+#	HORIZONTAL MOVEMENT
+	if Input.is_action_pressed("ui_left"):
+#		SHOW BUBBLES IN THE RIGHT PLACE
+		if sign($BubblePosHorizontal.position.x) == 1:
+			$BubblePosHorizontal.position.x *= -1
+		$Bubbles_Anim.position = $BubblePosHorizontal.position
+		$Player_Anim.play("Swim")
+		$Player_Anim.flip_h = true
+		submerged_velocity.x = -swim_speed
+	elif Input.is_action_pressed("ui_right"):
+#		POSITION BUBBLES CORRECTLY
+		if sign($BubblePosHorizontal.position.x) == -1:
+			$BubblePosHorizontal.position.x *= -1
+		$Bubbles_Anim.position = $BubblePosHorizontal.position
+		$Player_Anim.play("Swim")
+		$Player_Anim.flip_h = false
+		submerged_velocity.x = swim_speed
+	else:
+#		ON IDLE
+		submerged_velocity.x = 0
+		if !Input.is_action_pressed("ui_up") and !Input.is_action_pressed("ui_down") and !Input.is_action_pressed("ui_left") and !Input.is_action_pressed("ui_right"):
+			if sign($BubblePosHorizontal.position.x) == -1:
+				if sign($BubblesOrigin.position.x) != -1:
+					$BubblesOrigin.position.x *= -1
+			elif sign($BubblePosHorizontal.position.x) == 1:
+				if sign($BubblesOrigin.position.x) != 1:
+					$BubblesOrigin.position.x *= -1
+			$Bubbles_Anim.position = $BubblesOrigin.position
+			$Player_Anim.play("Float")
+		
+#	VERTICAL MOVEMENT
+	if Input.is_action_pressed("ui_up"):
+		if collided_tile[0] != 19:
+			if Input.is_action_pressed("ui_up") and (!Input.is_action_pressed("ui_left") and !Input.is_action_pressed("ui_right")):
+#				POSITION THE BUBBLES
+				if sign($BubblePosVertical.position.y) == 1:
+					$BubblePosVertical.position.y *= -1
+				$Bubbles_Anim.position = $BubblePosVertical.position
+				$Player_Anim.play("SwimUp")
+			submerged_velocity.y += -swim_speed * 2
+		elif collided_tile[0] == 19:			
+			is_submerged = false
+			velocity.y = JUMP_FORCE
+			velocity = move_and_slide(velocity, FLOOR)
+			return
+	elif Input.is_action_pressed("ui_down"):
+		if Input.is_action_pressed("ui_down") and (!Input.is_action_pressed("ui_left") and !Input.is_action_pressed("ui_right")):
+#			POSITION THE BUBBLES
+			if sign($BubblePosVertical.position.y) == -1:
+				$BubblePosVertical.position.y *= -1
+			$Bubbles_Anim.position = $BubblePosVertical.position
+			$Player_Anim.play("SwimDown")
+		submerged_velocity.y += swim_speed
+	
+	submerged_velocity.y += buoyancy
+	submerged_velocity = move_and_slide(submerged_velocity, FLOOR)		
+		
+		
+#MELEE ATTACKS HANDLER
+func handle_melee_attacks():
+	if !$MeleeCDTimer.is_stopped():
+		return
+		
+	if !is_ducked:
+		if is_on_floor():
+			velocity.x = 0
+		is_attacking = true
+		$Player_Anim.play("MeleeAttack")		
+		var melee_punch = REGULAR_PUNCH.instance()
+		melee_punch.set_direction(sign($MeleeHitPoint.position.x))
+		get_parent().add_child(melee_punch)
+		melee_punch.position = $MeleeHitPoint.global_position
+		$MeleeCDTimer.start()
+		
+			
+#GUN ATTACKS HANDLER
+func handle_gun_attacks():
+	if !$ShootCDTimer.is_stopped():
+		return
+		
+	if ammo <= 0:
+		return
+	if is_on_floor():
+		velocity.x = 0
+	is_attacking = true
+	reduce_one_from_ammo()
+	if is_ducked:
+		$Player_Anim.play("DuckShoot")
+	else:
+		$Player_Anim.play("Shoot")
+	var weapon_projectile = REGULAR_BULLET.instance()
+	weapon_projectile.set_direction(sign($ShootPoint.position.x))
+	get_parent().add_child(weapon_projectile)
+	weapon_projectile.position = $ShootPoint.global_position
+	$ShootCDTimer.start()	
 
 #SET DUCK ON/OFF
 func duck(enabled:bool)->void:
@@ -164,7 +319,7 @@ func on_enemy_hit(dmg, dodged:bool = false, hit_direction = 0):
 	if dodged:
 		turn_towards_enemy(hit_direction)
 		is_taking_damage = true
-		$Player_Anim.play("Dodge")
+		$Player_Anim.play(Animations.get_animation("DODGE", attack_mode))
 		return
 	if !$PulseTween.is_active():
 		$PulseTween.interpolate_property(self,"modulate", Color.white, Color.red, 0.5, Tween.TRANS_SINE,Tween.EASE_OUT)
@@ -201,7 +356,7 @@ func on_player_death():
 	$PulseStopTimer.stop()
 	self.modulate = Color.white
 	is_alive = false
-	$Player_Anim.play("Death")
+	$Player_Anim.play(Animations.get_animation("DEATH", attack_mode))
 	
 	
 #ON PICKUP	
@@ -247,6 +402,15 @@ func turn_towards_enemy(hit_direction):
 			$Player_Anim.flip_h = true
 		$ShootPoint.position.x *= -1
 	
+
+#IS PLAYER SUBMERGED/ NOT COUNTING SHALLOW WATER
+func get_colliding_tile() -> Array:
+	var collision_pos = self.global_position
+	var tilemap = get_parent().get_node("BaseLayer/TileMap") as TileMap
+	var tile_collision_pos = tilemap.world_to_map(collision_pos)
+	var tile = tilemap.get_cellv(tile_collision_pos)
+	return [tile, tile_collision_pos, tilemap]
+					
 					
 #IS THE ANIMATION DONE?
 func _on_Player_Anim_animation_finished():
@@ -278,3 +442,5 @@ func _on_Pick_Anim_animation_finished():
 
 func _on_WaterSplashTimer_timeout():
 	is_water_splashed = false
+
+

@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=90 format=2]
 
 [ext_resource path="res://sprites/player/v1/player_v1_03.png" type="Texture" id=1]
 [ext_resource path="res://sprites/player/v1/player_v1_02.png" type="Texture" id=2]
@@ -44,6 +44,46 @@
 [ext_resource path="res://pickups/ammo/ammo_picked_6.png" type="Texture" id=42]
 [ext_resource path="res://pickups/ammo/ammo_picked_3.png" type="Texture" id=43]
 [ext_resource path="res://sprites/player/v1/player_dodge_1.png" type="Texture" id=44]
+[ext_resource path="res://sprites/player/v1/player_swim_idle_0.png" type="Texture" id=45]
+[ext_resource path="res://sprites/player/v1/player_swim_idle_1.png" type="Texture" id=46]
+[ext_resource path="res://sprites/player/v1/player_swim_0.png" type="Texture" id=47]
+[ext_resource path="res://sprites/player/v1/player_swim_2.png" type="Texture" id=48]
+[ext_resource path="res://sprites/player/v1/player_swim_3.png" type="Texture" id=49]
+[ext_resource path="res://sprites/player/v1/player_swim_1.png" type="Texture" id=50]
+[ext_resource path="res://sprites/player/v1/player_swim_idle_3.png" type="Texture" id=51]
+[ext_resource path="res://sprites/player/v1/player_swim_idle_2.png" type="Texture" id=52]
+[ext_resource path="res://sprites/player/v1/player_swim_up_2.png" type="Texture" id=53]
+[ext_resource path="res://sprites/player/v1/player_swim_up_1.png" type="Texture" id=54]
+[ext_resource path="res://sprites/player/v1/player_swim_up_0.png" type="Texture" id=55]
+[ext_resource path="res://sprites/player/v1/player_swim_up_3.png" type="Texture" id=56]
+[ext_resource path="res://sprites/player/v1/player_swim_down_0.png" type="Texture" id=57]
+[ext_resource path="res://sprites/player/v1/player_swim_down_1.png" type="Texture" id=58]
+[ext_resource path="res://effects/bubbles/swim_bubbles_3.png" type="Texture" id=59]
+[ext_resource path="res://effects/bubbles/swim_bubbles_2.png" type="Texture" id=60]
+[ext_resource path="res://effects/bubbles/swim_bubbles_0.png" type="Texture" id=61]
+[ext_resource path="res://effects/bubbles/swim_bubbles_1.png" type="Texture" id=62]
+[ext_resource path="res://sprites/player/v1/player_melee_attack_1.png" type="Texture" id=63]
+[ext_resource path="res://sprites/player/v1/player_melee_attack_0.png" type="Texture" id=64]
+[ext_resource path="res://sprites/player/v1/player_melee_attack_2.png" type="Texture" id=65]
+[ext_resource path="res://sprites/player/v1/player_melee_walk_3.png" type="Texture" id=66]
+[ext_resource path="res://sprites/player/v1/player_melee_walk_1.png" type="Texture" id=67]
+[ext_resource path="res://sprites/player/v1/player_melee_walk_2.png" type="Texture" id=68]
+[ext_resource path="res://sprites/player/v1/player_melee_walk_0.png" type="Texture" id=69]
+[ext_resource path="res://sprites/player/v1/player_melee_duck_0.png" type="Texture" id=70]
+[ext_resource path="res://sprites/player/v1/player_melee_jump_1.png" type="Texture" id=71]
+[ext_resource path="res://sprites/player/v1/player_melee_jump_2.png" type="Texture" id=72]
+[ext_resource path="res://sprites/player/v1/player_melee_dodge_1.png" type="Texture" id=73]
+[ext_resource path="res://sprites/player/v1/player_melee_jump_3.png" type="Texture" id=74]
+[ext_resource path="res://sprites/player/v1/player_melee_jump_0.png" type="Texture" id=75]
+[ext_resource path="res://sprites/player/v1/player_melee_death_1.png" type="Texture" id=76]
+[ext_resource path="res://sprites/player/v1/player_melee_death_4.png" type="Texture" id=77]
+[ext_resource path="res://sprites/player/v1/player_melee_death_6.png" type="Texture" id=78]
+[ext_resource path="res://sprites/player/v1/player_melee_death_8.png" type="Texture" id=79]
+[ext_resource path="res://sprites/player/v1/player_melee_death_5.png" type="Texture" id=80]
+[ext_resource path="res://sprites/player/v1/player_melee_death_0.png" type="Texture" id=81]
+[ext_resource path="res://sprites/player/v1/player_melee_death_7.png" type="Texture" id=82]
+[ext_resource path="res://sprites/player/v1/player_melee_death_2.png" type="Texture" id=83]
+[ext_resource path="res://sprites/player/v1/player_melee_death_3.png" type="Texture" id=84]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -91,15 +131,75 @@ animations = [ {
 "loop": false,
 "name": "Dodge",
 "speed": 3.0
+}, {
+"frames": [ ExtResource( 57 ), ExtResource( 58 ), ExtResource( 57 ), ExtResource( 58 ) ],
+"loop": true,
+"name": "SwimDown",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 45 ), ExtResource( 46 ), ExtResource( 52 ), ExtResource( 51 ) ],
+"loop": true,
+"name": "Float",
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 47 ), ExtResource( 50 ), ExtResource( 48 ), ExtResource( 49 ) ],
+"loop": true,
+"name": "Swim",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 55 ), ExtResource( 54 ), ExtResource( 53 ), ExtResource( 56 ) ],
+"loop": true,
+"name": "SwimUp",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 70 ) ],
+"loop": false,
+"name": "MeleeDuck",
+"speed": 0.0
+}, {
+"frames": [ ExtResource( 69 ), ExtResource( 67 ), ExtResource( 68 ), ExtResource( 66 ) ],
+"loop": true,
+"name": "MeleeRun",
+"speed": 8.0
+}, {
+"frames": [ ExtResource( 75 ), ExtResource( 71 ), ExtResource( 72 ), ExtResource( 74 ) ],
+"loop": true,
+"name": "MeleeJump",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 75 ) ],
+"loop": false,
+"name": "MeleeIdle",
+"speed": 0.0
+}, {
+"frames": [ ExtResource( 73 ) ],
+"loop": false,
+"name": "MeleeDodge",
+"speed": 3.0
+}, {
+"frames": [ ExtResource( 72 ) ],
+"loop": false,
+"name": "MeleeFall",
+"speed": 0.0
+}, {
+"frames": [ ExtResource( 64 ), ExtResource( 63 ), ExtResource( 65 ), ExtResource( 65 ), ExtResource( 63 ) ],
+"loop": true,
+"name": "MeleeAttack",
+"speed": 20.0
+}, {
+"frames": [ ExtResource( 81 ), ExtResource( 76 ), ExtResource( 83 ), ExtResource( 84 ), ExtResource( 77 ), ExtResource( 80 ), ExtResource( 78 ), ExtResource( 82 ), ExtResource( 79 ) ],
+"loop": true,
+"name": "MeleeDeath",
+"speed": 5.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 6, 8 )
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 5.23918, 5.81005 )
 
-[sub_resource type="SpriteFrames" id=4]
+[sub_resource type="SpriteFrames" id=5]
 animations = [ {
 "frames": [ ExtResource( 41 ), ExtResource( 40 ), ExtResource( 37 ), ExtResource( 43 ), ExtResource( 39 ), ExtResource( 38 ), ExtResource( 42 ), ExtResource( 41 ), ExtResource( 40 ), ExtResource( 37 ), ExtResource( 43 ), ExtResource( 39 ), ExtResource( 38 ), ExtResource( 42 ) ],
 "loop": true,
@@ -117,6 +217,14 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="SpriteFrames" id=6]
+animations = [ {
+"frames": [ ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 59 ) ],
+"loop": true,
+"name": "Bubbles",
+"speed": 5.0
+} ]
+
 [node name="Player" type="KinematicBody2D"]
 collision_mask = 22
 script = ExtResource( 15 )
@@ -127,15 +235,22 @@ __meta__ = {
 [node name="Player_Anim" type="AnimatedSprite" parent="."]
 scale = Vector2( 2, 2 )
 frames = SubResource( 1 )
-animation = "Dodge"
+animation = "MeleeAttack"
+frame = 4
 
 [node name="Player_Hitbox" type="CollisionShape2D" parent="."]
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
 [node name="Player_Duckbox" type="CollisionShape2D" parent="."]
 position = Vector2( -1.38886, 2.19294 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 disabled = true
+
+[node name="MeleeHitPoint" type="Position2D" parent="."]
+position = Vector2( 6.19207, 0 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="ShootPoint" type="Position2D" parent="."]
 position = Vector2( 10, -1 )
@@ -147,8 +262,12 @@ limit_top = -180
 limit_right = 640
 limit_bottom = 180
 limit_smoothed = true
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
 smoothing_enabled = true
 smoothing_speed = 4.0
+editor_draw_limits = true
+editor_draw_drag_margin = true
 
 [node name="PulseTween" type="Tween" parent="."]
 repeat = true
@@ -167,13 +286,36 @@ wait_time = 3.0
 [node name="Pick_Anim" type="AnimatedSprite" parent="."]
 visible = false
 scale = Vector2( 2, 2 )
-frames = SubResource( 4 )
+frames = SubResource( 5 )
 animation = "AmmoPicked"
 
 [node name="ShootCDTimer" type="Timer" parent="."]
 one_shot = true
 
+[node name="MeleeCDTimer" type="Timer" parent="."]
+one_shot = true
+
 [node name="WaterSplashTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Bubbles_Anim" type="AnimatedSprite" parent="."]
+position = Vector2( 10.3207, -1.70516 )
+frames = SubResource( 6 )
+animation = "Bubbles"
+frame = 1
+playing = true
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="BubblePosHorizontal" type="Position2D" parent="."]
+position = Vector2( 9.20785, 1.27887 )
+
+[node name="BubblePosVertical" type="Position2D" parent="."]
+position = Vector2( -9.53674e-07, -7.67321 )
+
+[node name="BubblesOrigin" type="Position2D" parent="."]
+position = Vector2( 5.71228, -5.37125 )
 [connection signal="animation_finished" from="Player_Anim" to="." method="_on_Player_Anim_animation_finished"]
 [connection signal="timeout" from="PulseStopTimer" to="." method="_on_PulseStopTimer_timeout"]
 [connection signal="timeout" from="PickupStopTimer" to="." method="_on_PickupStopTimer_timeout"]

@@ -12,7 +12,6 @@ func _ready():
 func activate_healing(body):
 	if infinite_heal or max_heal > 0:
 		if body.name == "Player":
-			print_debug("Healing...")
 			body.is_tree_heal_active = true
 			if !$Tree_Heal_Anim.playing:
 				$Tree_Heal_Anim.visible = true
@@ -22,7 +21,6 @@ func activate_healing(body):
 
 func deactivate_healing(body):
 	if body.name == "Player":
-		print_debug("Left tree...")		
 		body.is_tree_heal_active = false
 		$Tree_Heal_Timer.stop()
 		

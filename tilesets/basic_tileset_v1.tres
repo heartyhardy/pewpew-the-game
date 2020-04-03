@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=18 format=2]
+[gd_resource type="TileSet" load_steps=31 format=2]
 
 [ext_resource path="res://tiles/basic-tiles-v1.png" type="Texture" id=1]
 [ext_resource path="res://environment/water/default/water_base_0.png" type="Texture" id=2]
@@ -14,6 +14,17 @@
 [ext_resource path="res://effects/specials/water_tile_with_basement_1.png" type="Texture" id=12]
 [ext_resource path="res://effects/specials/water_tile_with_basement_5.png" type="Texture" id=13]
 [ext_resource path="res://effects/hidden/hidden_pillar_bottom_tile.png" type="Texture" id=14]
+[ext_resource path="res://environment/water/deep/water_top_tile_0.png" type="Texture" id=15]
+[ext_resource path="res://environment/water/deep/water_base_tile_2.png" type="Texture" id=16]
+[ext_resource path="res://environment/water/deep/water_top_tile_2.png" type="Texture" id=17]
+[ext_resource path="res://environment/water/deep/water_base_tile_0.png" type="Texture" id=18]
+[ext_resource path="res://environment/water/deep/water_top_tile_5.png" type="Texture" id=19]
+[ext_resource path="res://environment/water/deep/water_top_tile_3.png" type="Texture" id=20]
+[ext_resource path="res://environment/water/deep/water_top_tile_1.png" type="Texture" id=21]
+[ext_resource path="res://environment/water/deep/water_top_tile_4.png" type="Texture" id=22]
+[ext_resource path="res://environment/water/deep/water_base_tile_1.png" type="Texture" id=23]
+[ext_resource path="res://environment/water/deep/water_base_tile_4.png" type="Texture" id=24]
+[ext_resource path="res://environment/water/deep/water_base_tile_3.png" type="Texture" id=25]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
@@ -47,6 +58,34 @@ frame_4/texture = ExtResource( 10 )
 frame_4/delay_sec = 0.0
 frame_5/texture = ExtResource( 13 )
 frame_5/delay_sec = 0.0
+
+[sub_resource type="AnimatedTexture" id=4]
+frames = 6
+fps = 5.0
+frame_0/texture = ExtResource( 15 )
+frame_1/texture = ExtResource( 21 )
+frame_1/delay_sec = 0.0
+frame_2/texture = ExtResource( 17 )
+frame_2/delay_sec = 0.0
+frame_3/texture = ExtResource( 20 )
+frame_3/delay_sec = 0.0
+frame_4/texture = ExtResource( 22 )
+frame_4/delay_sec = 0.0
+frame_5/texture = ExtResource( 19 )
+frame_5/delay_sec = 0.0
+
+[sub_resource type="AnimatedTexture" id=5]
+frames = 5
+fps = 5.0
+frame_0/texture = ExtResource( 18 )
+frame_1/texture = ExtResource( 23 )
+frame_1/delay_sec = 0.0
+frame_2/texture = ExtResource( 16 )
+frame_2/delay_sec = 0.0
+frame_3/texture = ExtResource( 25 )
+frame_3/delay_sec = 0.0
+frame_4/texture = ExtResource( 24 )
+frame_4/delay_sec = 0.0
 
 [resource]
 0/name = "BaseTile"
@@ -335,3 +374,23 @@ frame_5/delay_sec = 0.0
 18/navigation_offset = Vector2( 0, 0 )
 18/shapes = [  ]
 18/z_index = 0
+19/name = "water_top"
+19/texture = SubResource( 4 )
+19/tex_offset = Vector2( 0, 0 )
+19/modulate = Color( 1, 1, 1, 0.784314 )
+19/region = Rect2( 0, 0, 16, 16 )
+19/tile_mode = 0
+19/occluder_offset = Vector2( 0, 0 )
+19/navigation_offset = Vector2( 0, 0 )
+19/shapes = [  ]
+19/z_index = 0
+20/name = "water_base_tile_0.png 20"
+20/texture = SubResource( 5 )
+20/tex_offset = Vector2( 0, 0 )
+20/modulate = Color( 1, 1, 1, 0.784314 )
+20/region = Rect2( 0, 0, 16, 16 )
+20/tile_mode = 0
+20/occluder_offset = Vector2( 0, 0 )
+20/navigation_offset = Vector2( 0, 0 )
+20/shapes = [  ]
+20/z_index = 0

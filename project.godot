@@ -24,6 +24,8 @@ config/icon="res://icon.png"
 PlayerGlobals="*res://PlayerGlobals.tscn"
 Skills="*res://Skills.tscn"
 SkillChecks="*res://SkillChecks.tscn"
+AttackMode="*res://AttackMode.tscn"
+Animations="*res://Animations.tscn"
 
 [display]
 

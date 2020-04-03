@@ -8,8 +8,15 @@ Features to be implemented
 4. Secret tiles/ Secret doors **DONE**
 5. Optional max heal for Medium Tree **DONE**
 6. Sheep random funny stuff
-7. Underwater sub region and player functionalities
+7. Underwater sub region and player functionalities **DONE**
 8. First NPC to teach dodge skill
-9. Melee attack
+9. Melee attack *DONE PARTIALLY*
 10. Fire attack and set environment on fire
-11. Think about funny stuff to add to game 
+11. Think about funny stuff to add to game
+
+
+BUGS/ISSUES
+
+* DUCK + SPACE gets stuck sometimes
+* WEAPON/MELEE CD needs a revisit
+* WATER SPLASHES TWICE WHEN PLAYER IS NEAR TILE 19
