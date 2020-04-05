@@ -31,7 +31,6 @@ func deactivate_skill(skill: String) -> int:
 
 func _physics_process(delta):
 #	APPLY MINOR HASTE IF IN MELEE MODE
-	print_debug(PlayerGlobals.get("is_on_ground"))
 	toggle_minor_haste()
 
 

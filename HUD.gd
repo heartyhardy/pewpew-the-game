@@ -1,5 +1,9 @@
 extends Control
 
+export(int) var high_hp_limit = 100
+export(int) var medium_hp_limit = 50
+export(int) var low_hp_limit = 25
+
 var player
 
 #TEXT COLORS
@@ -29,27 +33,25 @@ func _physics_process(delta):
 
 #SET COLOR TO THE GIVEN LABEL DEPENDING ON THE NUMBER
 func set_label_color(lbl, num):
-	if num <= 100 and num > 50:
-		lbl.add_color_override("font_color", green)
-		$HPBlinkTimer.paused = true
-	elif num <= 50 and num > 20:
+	if num <= high_hp_limit and num > medium_hp_limit:
+		lbl.add_color_override("font_color", green)		
+	elif num <= medium_hp_limit and num > low_hp_limit:
 		lbl.add_color_override("font_color", orange)
-		$HPBlinkTimer.paused = true		
-	elif num <= 20:
+	elif num <= low_hp_limit:
 		lbl.add_color_override("font_color", red)
-		if $HPBlinkTimer.paused:
-			$HPBlinkTimer.paused = false
-		elif $HPBlinkTimer.is_stopped():
+		if $HPBlinkTimer.is_stopped():
 			$HPBlinkTimer.start()
 
 
 func _on_Timer_timeout():
 	var hp = PlayerGlobals.get_hp()
-	if hp <= 50:
+	if hp <= low_hp_limit:
 		var is_visible = $StatusBar/HealthCounter/Icon.visible
 		if is_visible:
 			$StatusBar/HealthCounter/Icon.visible = false
 		elif !is_visible:
 			$StatusBar/HealthCounter/Icon.visible = true
+	else:
+		$HPBlinkTimer.stop()
 			
 

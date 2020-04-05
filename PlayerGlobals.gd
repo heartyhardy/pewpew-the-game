@@ -1,6 +1,7 @@
 extends Node2D
 
 const MAX_SPEED = 200
+const MAX_OXYGEN = 200
 const MAX_JUMP = 400
 
 #PLAYER OBJECT
@@ -12,6 +13,10 @@ var armor
 var ammo
 var speed
 var jump_speed
+
+#MISC PROPERTIES
+var current_oxygen
+var maximum_oxygen
 
 #PLAYER STATUS
 var is_on_ground = false
@@ -49,6 +54,16 @@ func get_speed():
 func get_jump_speed():
 	return jump_speed
 
+
+#GET CURRENT OXYGEN
+func get_current_oxygen():
+	return current_oxygen
+	
+	
+#GET MAX OXYGEN
+func get_max_oxygen():
+	return maximum_oxygen
+	
 
 #SET PLAYER HP
 func set_hp(player_hp):
@@ -89,6 +104,18 @@ func set_speed(player_speed):
 #SET PLAYER JUMP_SPEED
 func set_jump_speed(player_jump):
 	if speed <= MAX_JUMP:
-		jump_speed = player_jump	
+		jump_speed = player_jump
+		
+		
+#SET CURRENT OXYGEN
+func set_current_oxygen(oxygen):
+	if oxygen <= maximum_oxygen:
+		current_oxygen = oxygen
+		
+
+#SET MAX OXYGEN
+func set_max_oxygen(oxygen):
+	if oxygen <= MAX_OXYGEN:
+		maximum_oxygen = oxygen
 
 

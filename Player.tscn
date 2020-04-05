@@ -1,4 +1,4 @@
-[gd_scene load_steps=98 format=2]
+[gd_scene load_steps=99 format=2]
 
 [ext_resource path="res://sprites/player/v1/player_v1_03.png" type="Texture" id=1]
 [ext_resource path="res://sprites/player/v1/player_v1_02.png" type="Texture" id=2]
@@ -91,6 +91,7 @@
 [ext_resource path="res://effects/passive/minor_haste/minor_haste_4.png" type="Texture" id=89]
 [ext_resource path="res://effects/passive/minor_haste/minor_haste_6.png" type="Texture" id=90]
 [ext_resource path="res://effects/passive/minor_haste/minor_haste_5.png" type="Texture" id=91]
+[ext_resource path="res://OxygenBar.tscn" type="PackedScene" id=92]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -208,11 +209,6 @@ extents = Vector2( 5.23918, 5.81005 )
 
 [sub_resource type="SpriteFrames" id=4]
 animations = [ {
-"frames": [ ExtResource( 41 ), ExtResource( 40 ), ExtResource( 37 ), ExtResource( 43 ), ExtResource( 39 ), ExtResource( 38 ), ExtResource( 42 ), ExtResource( 41 ), ExtResource( 40 ), ExtResource( 37 ), ExtResource( 43 ), ExtResource( 39 ), ExtResource( 38 ), ExtResource( 42 ) ],
-"loop": true,
-"name": "AmmoPicked",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 25 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 30 ), ExtResource( 27 ), ExtResource( 25 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 30 ), ExtResource( 27 ), ExtResource( 29 ), ExtResource( 29 ) ],
 "loop": true,
 "name": "HPPicked",
@@ -221,6 +217,11 @@ animations = [ {
 "frames": [ ExtResource( 31 ), ExtResource( 35 ), ExtResource( 36 ), ExtResource( 32 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 31 ), ExtResource( 35 ), ExtResource( 36 ), ExtResource( 32 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 34 ) ],
 "loop": true,
 "name": "ArmorPicked",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 41 ), ExtResource( 40 ), ExtResource( 37 ), ExtResource( 43 ), ExtResource( 39 ), ExtResource( 38 ), ExtResource( 42 ), ExtResource( 41 ), ExtResource( 40 ), ExtResource( 37 ), ExtResource( 43 ), ExtResource( 39 ), ExtResource( 38 ), ExtResource( 42 ) ],
+"loop": true,
+"name": "AmmoPicked",
 "speed": 5.0
 } ]
 
@@ -246,6 +247,15 @@ script = ExtResource( 15 )
 __meta__ = {
 "_edit_group_": true
 }
+
+[node name="OxygenBar" parent="." instance=ExtResource( 92 )]
+margin_left = -10.7312
+margin_top = -14.9003
+margin_right = -10.7312
+margin_bottom = -14.9003
+rect_scale = Vector2( 0.35, 0.25 )
+
+[node name="OxygenTimer" type="Timer" parent="."]
 
 [node name="Player_Anim" type="AnimatedSprite" parent="."]
 scale = Vector2( 2, 2 )
@@ -317,7 +327,7 @@ one_shot = true
 position = Vector2( 10.3207, -1.70516 )
 frames = SubResource( 5 )
 animation = "Bubbles"
-frame = 2
+frame = 1
 playing = true
 __meta__ = {
 "_edit_group_": true
@@ -343,6 +353,7 @@ animation = "Hasted"
 __meta__ = {
 "_edit_group_": true
 }
+[connection signal="timeout" from="OxygenTimer" to="." method="_on_OxygenTimer_timeout"]
 [connection signal="animation_finished" from="Player_Anim" to="." method="_on_Player_Anim_animation_finished"]
 [connection signal="timeout" from="PulseStopTimer" to="." method="_on_PulseStopTimer_timeout"]
 [connection signal="timeout" from="PickupStopTimer" to="." method="_on_PickupStopTimer_timeout"]

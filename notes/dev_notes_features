@@ -15,8 +15,9 @@ Features to be implemented
 11. Think about funny stuff to add to game
 12. Add a cooldown to mode switching
 13. SPEED boost in melee mode *DONE*
-14. Active traits/skills
-15. Disable Haste when underwater
+14. Active traits/skills **DONE**
+15. Disable Haste when underwater **DONE**
+16. MELEE uppercut and kick
 
 
 BUGS/ISSUES
@@ -24,3 +25,4 @@ BUGS/ISSUES
 * DUCK + SPACE gets stuck sometimes
 * WEAPON/MELEE CD needs a revisit
 * WATER SPLASHES TWICE WHEN PLAYER IS NEAR TILE 19
+* HP BLINK in HUD not working properly

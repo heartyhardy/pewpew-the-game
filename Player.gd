@@ -6,6 +6,9 @@ export(int) var ammo = 100
 export(int) var speed = 50
 export(int) var jump_speed = -250
 export(int) var swim_speed = 20
+export(int) var current_oxygen = 100
+export(int) var max_oxygen = 100
+export(int) var oxygen_consuption = 5
 
 export(int) var buoyancy = 5
 
@@ -26,7 +29,9 @@ var is_water_splashed = false
 var is_grass_dodge_active = false
 var is_tree_heal_active = false
 var is_submerged = false
+var is_out_of_breath = false
 
+onready var oxygenbar = $OxygenBar
 
 func _ready():
 
@@ -36,6 +41,8 @@ func _ready():
 	PlayerGlobals.set("ammo", ammo)
 	PlayerGlobals.set("speed", speed)
 	PlayerGlobals.set("jump_speed", jump_speed)
+	PlayerGlobals.set("current_oxygen", current_oxygen)
+	PlayerGlobals.set("maximum_oxygen", max_oxygen)	
 	
 	var tilemap_rect = get_parent().get_node("BaseLayer/TileMap").get_used_rect()
 	var cell_size = get_parent().get_node("BaseLayer/TileMap").cell_size	
@@ -44,6 +51,10 @@ func _ready():
 	$Player_Cam.limit_right = tilemap_rect.end.x * cell_size.x
 	$Player_Cam.limit_top = (tilemap_rect.position.y - 32) * cell_size.y
 	$Player_Cam.limit_bottom = tilemap_rect.end.y * cell_size.y
+	
+	oxygenbar.on_max_oxygen_updated(PlayerGlobals.get_max_oxygen())
+	oxygenbar.on_oxygen_updated(PlayerGlobals.get_max_oxygen())
+	oxygenbar.visible = false
 
 
 #INPUT EVENTS
@@ -97,7 +108,6 @@ func _physics_process(delta):
 		PlayerGlobals.set("is_submerged", true)				
 		handle_underwater_movement(tile)
 			
-	print_debug(PlayerGlobals.get_speed())
 #	WATER SPLASH ON CONTACT
 	water_splash()
 
@@ -124,7 +134,10 @@ func water_splash():
 func handle_ground_movement():
 #	HIDE BUBBLES
 	hide_water_bubbles()
-		
+	
+#	HIDE OXYGEN BAR
+	hide_oxygenbar()
+	
 	if attack_mode == AttackMode.ATTACK_MODES.MELEE and !$PassiveEffects/MinorHaste_Ani.visible:
 		show_haste_effects()
 	elif !attack_mode == AttackMode.ATTACK_MODES.MELEE:
@@ -223,6 +236,12 @@ func handle_underwater_movement(collided_tile: Array):
 	
 #	HIDE HASTE VISUAL EFFECT (DISABLING IT HAPPENS IN PASSIVESKILLS PHYSICS PROCESS)
 	hide_haste_effects()
+	
+#	SHOW OXYGEN BAR
+	show_oxygenbar()
+	
+	if $OxygenTimer.is_stopped():
+		$OxygenTimer.start()
 	
 #	HORIZONTAL MOVEMENT
 	if Input.is_action_pressed("ui_left"):
@@ -350,7 +369,11 @@ func on_enemy_hit(dmg, dodged:bool = false, hit_direction = 0):
 		$PulseTween.interpolate_property(self,"modulate", Color.white, Color.red, 0.5, Tween.TRANS_SINE,Tween.EASE_OUT)
 		$PulseTween.start()
 		$PulseStopTimer.start()
-	reduce_from_armor(dmg)
+#	IGNORE ARMOR WHEN OUT OF BREATH
+	if !is_out_of_breath:
+		reduce_from_armor(dmg)
+	else:
+		reduce_from_hp(dmg)
 	PlayerGlobals.set_hp(hp)
 	if hp <= 0:
 		PlayerGlobals.set_hp(hp)
@@ -364,6 +387,7 @@ func reduce_one_from_ammo():
 		ammo = 0
 	PlayerGlobals.set_ammo(ammo)
 
+
 #IF PLAYER HAS ARMOR REDUCE DMG FROM ARMOR, IF NOT REDUCE FROM HP
 func reduce_from_armor(dmg):
 	var remainder = armor - dmg
@@ -373,7 +397,17 @@ func reduce_from_armor(dmg):
 		hp += remainder
 		armor = 0
 	PlayerGlobals.set_armor(armor)
-		
+
+
+#REDUCE DIRECTLY FROM HP
+func reduce_from_hp(dmg):
+	if is_alive:
+		var current_hp = PlayerGlobals.get_hp()
+		current_hp -= dmg
+		PlayerGlobals.set_hp(current_hp)
+		print_debug(PlayerGlobals.get_hp())
+		hp = PlayerGlobals.get_hp()
+				
 		
 #WHEN PLAYER DIES DO THESE
 func on_player_death():
@@ -466,6 +500,24 @@ func show_haste_effects():
 	if !$PassiveEffects/MinorHaste_Ani.visible:	
 		$PassiveEffects/MinorHaste_Ani.visible = true
 		$PassiveEffects/MinorHaste_Ani.play("Hasted")
+
+
+#SHOW OXYGEN BAR
+func show_oxygenbar():
+	if !oxygenbar.visible:
+		max_oxygen = PlayerGlobals.get_max_oxygen()
+		current_oxygen = max_oxygen
+		PlayerGlobals.set_current_oxygen(max_oxygen)
+		oxygenbar.on_max_oxygen_updated(PlayerGlobals.get_max_oxygen())
+		oxygenbar.on_oxygen_updated(PlayerGlobals.get_max_oxygen())		
+		oxygenbar.visible = true
+		is_out_of_breath = false
+		
+		
+#HIDE OXYGEN BAR		
+func hide_oxygenbar():
+	if oxygenbar.visible:
+		oxygenbar.visible = false
 		
 #*** END OF TOGGLE FUNCTIONS ***
 
@@ -502,3 +554,24 @@ func _on_WaterSplashTimer_timeout():
 	is_water_splashed = false
 
 
+func _on_OxygenTimer_timeout():
+	if !is_submerged:
+		$OxygenTimer.stop()
+		return
+		
+	if !is_alive:
+		return
+	
+#	REDUCE OXYGEN	
+	var oxygen = PlayerGlobals.get_current_oxygen()
+	oxygen -= oxygen_consuption
+	if oxygen > 0:
+		is_out_of_breath = false
+		current_oxygen = oxygen
+		PlayerGlobals.set_current_oxygen(oxygen)
+		oxygenbar.on_oxygen_updated(oxygen)	
+	elif oxygen <= 0:
+		is_out_of_breath = true
+		current_oxygen = 0
+		PlayerGlobals.set_current_oxygen(0)
+		on_enemy_hit(oxygen_consuption)
