@@ -1,5 +1,8 @@
 extends Node2D
 
+const MAX_SPEED = 200
+const MAX_JUMP = 400
+
 #PLAYER OBJECT
 var player
 
@@ -7,6 +10,12 @@ var player
 var hp
 var armor
 var ammo
+var speed
+var jump_speed
+
+#PLAYER STATUS
+var is_on_ground = false
+var is_submerged = false
 
 func _ready():
 	pass
@@ -29,7 +38,17 @@ func get_armor():
 #GET PLAYER AMMO
 func get_ammo():
 	return ammo
-	
+
+
+#GET PLAYER SPEED
+func get_speed():
+	return speed
+
+
+#GET JUMP SPEED
+func get_jump_speed():
+	return jump_speed
+
 
 #SET PLAYER HP
 func set_hp(player_hp):
@@ -59,4 +78,17 @@ func set_ammo(player_ammo):
 		ammo = 999
 	else:
 		ammo = player_ammo
+
 		
+#SET PLAYER SPEED
+func set_speed(player_speed):
+	if speed <= MAX_SPEED:
+		speed = player_speed
+		
+		
+#SET PLAYER JUMP_SPEED
+func set_jump_speed(player_jump):
+	if speed <= MAX_JUMP:
+		jump_speed = player_jump	
+
+

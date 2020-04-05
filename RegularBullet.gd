@@ -2,6 +2,7 @@ extends Area2D
 
 export(int) var speed = 200
 export(int) var damage = 10
+export(float) var cooldown = 0.35
 
 var velocity = Vector2()
 var direction = 1

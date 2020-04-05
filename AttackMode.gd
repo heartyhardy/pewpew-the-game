@@ -1,6 +1,6 @@
 extends Node2D
 
-enum ATTACK_MODES {MELEE = 1, GUN = 2}
+enum ATTACK_MODES {MELEE = 1, RANGED = 2}
 
 var attack_mode_length = 2
 var current_attack_mode = ATTACK_MODES.MELEE

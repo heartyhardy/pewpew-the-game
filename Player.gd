@@ -1,23 +1,16 @@
 extends KinematicBody2D
 
-export(int) var speed = 30
-export(int) var swim_speed = 20
 export(int) var hp = 100
 export(int) var armor = 50
 export(int) var ammo = 100
-
-export(float) var weapon_cooldown = 0.35
-export(float) var melee_cooldown = 0.3
+export(int) var speed = 50
+export(int) var jump_speed = -250
+export(int) var swim_speed = 20
 
 export(int) var buoyancy = 5
 
 const GRAVITY = 10
-const JUMP_FORCE = -250
 const FLOOR = Vector2(0, -1)
-
-const REGULAR_BULLET = preload("res://RegularBullet.tscn")
-const REGULAR_PUNCH = preload("res://MeleeDefaultPunch.tscn")
-const WATER_SPLASH = preload("res://WaterSplash.tscn")
 
 var velocity = Vector2()
 var submerged_velocity = Vector2()
@@ -41,6 +34,8 @@ func _ready():
 	PlayerGlobals.set("hp", hp)
 	PlayerGlobals.set("armor", armor)
 	PlayerGlobals.set("ammo", ammo)
+	PlayerGlobals.set("speed", speed)
+	PlayerGlobals.set("jump_speed", jump_speed)
 	
 	var tilemap_rect = get_parent().get_node("BaseLayer/TileMap").get_used_rect()
 	var cell_size = get_parent().get_node("BaseLayer/TileMap").cell_size	
@@ -49,18 +44,29 @@ func _ready():
 	$Player_Cam.limit_right = tilemap_rect.end.x * cell_size.x
 	$Player_Cam.limit_top = (tilemap_rect.position.y - 32) * cell_size.y
 	$Player_Cam.limit_bottom = tilemap_rect.end.y * cell_size.y
-	
-	$ShootCDTimer.wait_time = weapon_cooldown
-	$MeleeCDTimer.wait_time = melee_cooldown
 
 
 #INPUT EVENTS
 func _input(event: InputEvent):
 	if event is InputEventKey and event.pressed:
-		if event.scancode == KEY_V:
-			attack_mode = AttackMode.cycle_attack_mode()
+		match event.scancode:
+			KEY_V:
+				attack_mode = AttackMode.cycle_attack_mode() 
+			KEY_1:
+				process_attack_switch(1)				
+			KEY_2:
+				process_attack_switch(2)
+
+
+#PROCESS ATTACK SWITCH KEY		
+func process_attack_switch(attack_key:int):
+	if attack_mode == AttackMode.ATTACK_MODES.MELEE:
+		MeleeAttackTypes.set_current_attack(attack_key)
+	elif attack_mode == AttackMode.ATTACK_MODES.RANGED:
+		RangedAttackTypes.set_current_attack(attack_key)
 		
 
+#*** PHYSICS PROCESS ***
 func _physics_process(delta):
 	
 #	IF DEAD DON'T PROCESS PHYSICS
@@ -74,18 +80,24 @@ func _physics_process(delta):
 		submerged_velocity.x = 0
 		submerged_velocity.y = buoyancy
 	elif tile[0] == -1:
-		is_submerged = false
-		
+		is_submerged = false		
 		
 	
 #	GROUND MOVEMENT
 	if !is_submerged:
+#		SET PLAYER GLOBAL STATE
+		PlayerGlobals.set("is_on_ground", true)
+		PlayerGlobals.set("is_submerged", false)
+				
 		handle_ground_movement()
 	elif is_submerged:		
-#	UNDERWATER MOVEMENT	
+#	UNDERWATER MOVEMENT
+#		SET PLAYER GLOBAL STATE
+		PlayerGlobals.set("is_on_ground", false)
+		PlayerGlobals.set("is_submerged", true)				
 		handle_underwater_movement(tile)
 			
-	
+	print_debug(PlayerGlobals.get_speed())
 #	WATER SPLASH ON CONTACT
 	water_splash()
 
@@ -98,10 +110,10 @@ func water_splash():
 	var tile = get_colliding_tile()
 	if tile[0] in [16, 19] and !is_on_floor():
 		is_water_splashed = true
-		print_debug(tile[1].x, tile[2].cell_size, tile[2].position.y)
 		var splash_pos = Vector2((tile[1].x * tile[2].cell_size.x)
 		 + tile[2].cell_size.x/2, (tile[1].y * tile[2].cell_size.y) - 6)
-		var splash = WATER_SPLASH.instance()
+#		GET WATER EFFECT FROM PRELOADER
+		var splash = SpecialEffectTypes.get_special_effect(1).instance()
 		get_parent().add_child(splash)
 		splash.position = splash_pos
 	$WaterSplashTimer.start()
@@ -111,41 +123,50 @@ func water_splash():
 #GROUND MOVEMENT HANDLER
 func handle_ground_movement():
 #	HIDE BUBBLES
-	if $Bubbles_Anim.visible:
-		$Bubbles_Anim.stop()
-		$Bubbles_Anim.visible = false
+	hide_water_bubbles()
+		
+	if attack_mode == AttackMode.ATTACK_MODES.MELEE and !$PassiveEffects/MinorHaste_Ani.visible:
+		show_haste_effects()
+	elif !attack_mode == AttackMode.ATTACK_MODES.MELEE:
+		hide_haste_effects()
 	
 #	HORIZONTAL MOVEMENT
 	if Input.is_action_pressed("ui_right") and !is_ducked and !is_taking_damage and is_alive:			
 		if !is_attacking or !is_on_floor():
-			velocity.x = speed
+			velocity.x = PlayerGlobals.get_speed()
 			if !is_attacking:
 				$Player_Anim.play(Animations.get_animation("RUN", attack_mode))
-				$Player_Anim.flip_h = false
+				$Player_Anim.flip_h = false				
 				if sign($ShootPoint.position.x)  == -1:
 					$ShootPoint.position.x *= -1
 					$MeleeHitPoint.position.x *= -1
+					$PassiveEffects/MinorHaste_Ani.position *= -1
+					$PassiveEffects/MinorHaste_Ani.flip_h = false					
 	elif Input.is_action_pressed("ui_left") and !is_ducked and !is_taking_damage and is_alive:			
 		if !is_attacking or !is_on_floor():
-			velocity.x = -speed
+			velocity.x = -PlayerGlobals.get_speed()
 			if !is_attacking:
 				$Player_Anim.play(Animations.get_animation("RUN", attack_mode))
-				$Player_Anim.flip_h = true
+				$Player_Anim.flip_h = true	
 				if sign($ShootPoint.position.x) == 1:
 					$ShootPoint.position.x *= -1
 					$MeleeHitPoint.position.x *= -1
+					$PassiveEffects/MinorHaste_Ani.position *= -1
+					$PassiveEffects/MinorHaste_Ani.flip_h = true
 	else:
 		velocity.x = 0
 		if is_on_ground and !is_attacking and is_alive and !is_ducked and !is_taking_damage:
 			$Player_Anim.play(Animations.get_animation("IDLE", attack_mode))
 		if is_on_ground and !is_attacking and is_alive and is_ducked and !is_taking_damage:
 			$Player_Anim.play(Animations.get_animation("DUCK", attack_mode))
+#		HIDE HASTE EFFECT WHEN STATIONARY
+		hide_haste_effects()
 			
 	
 #	VERTICAL MOVEMENT
 	if Input.is_action_pressed("ui_up") and !is_ducked and is_on_ground and is_alive:
 		if !is_attacking:
-			velocity.y = JUMP_FORCE
+			velocity.y = PlayerGlobals.get_jump_speed()
 			is_on_ground = false
 #	DUCK MODE
 	if Input.is_action_just_pressed("ui_down") and is_on_ground and is_alive:
@@ -198,9 +219,10 @@ func handle_ground_movement():
 #UNDERWATERMOVEMENT HANDLER
 func handle_underwater_movement(collided_tile: Array):
 #	SHOW BUBBLES
-	if !$Bubbles_Anim.visible:
-		$Bubbles_Anim.visible = true
-		$Bubbles_Anim.play("Bubbles")
+	show_water_bubbles()
+	
+#	HIDE HASTE VISUAL EFFECT (DISABLING IT HAPPENS IN PASSIVESKILLS PHYSICS PROCESS)
+	hide_haste_effects()
 	
 #	HORIZONTAL MOVEMENT
 	if Input.is_action_pressed("ui_left"):
@@ -244,7 +266,7 @@ func handle_underwater_movement(collided_tile: Array):
 			submerged_velocity.y += -swim_speed * 2
 		elif collided_tile[0] == 19:			
 			is_submerged = false
-			velocity.y = JUMP_FORCE
+			velocity.y = PlayerGlobals.get_jump_speed()
 			velocity = move_and_slide(velocity, FLOOR)
 			return
 	elif Input.is_action_pressed("ui_down"):
@@ -267,13 +289,15 @@ func handle_melee_attacks():
 		
 	if !is_ducked:
 		if is_on_floor():
+#			LATER CHANGE THIS SO PLAYER CAN CHASE AND HIT
 			velocity.x = 0
 		is_attacking = true
 		$Player_Anim.play("MeleeAttack")		
-		var melee_punch = REGULAR_PUNCH.instance()
+		var melee_punch = MeleeAttackTypes.get_current_attack().instance()
 		melee_punch.set_direction(sign($MeleeHitPoint.position.x))
 		get_parent().add_child(melee_punch)
 		melee_punch.position = $MeleeHitPoint.global_position
+		$MeleeCDTimer.wait_time = melee_punch.cooldown
 		$MeleeCDTimer.start()
 		
 			
@@ -292,10 +316,11 @@ func handle_gun_attacks():
 		$Player_Anim.play("DuckShoot")
 	else:
 		$Player_Anim.play("Shoot")
-	var weapon_projectile = REGULAR_BULLET.instance()
+	var weapon_projectile = RangedAttackTypes.get_current_attack().instance()
 	weapon_projectile.set_direction(sign($ShootPoint.position.x))
 	get_parent().add_child(weapon_projectile)
 	weapon_projectile.position = $ShootPoint.global_position
+	$ShootCDTimer.wait_time = weapon_projectile.cooldown
 	$ShootCDTimer.start()	
 
 #SET DUCK ON/OFF
@@ -410,7 +435,40 @@ func get_colliding_tile() -> Array:
 	var tile_collision_pos = tilemap.world_to_map(collision_pos)
 	var tile = tilemap.get_cellv(tile_collision_pos)
 	return [tile, tile_collision_pos, tilemap]
+	
+
+#***** TOGGLE FUNCTIONS ***
 					
+#HIDE WATER BUBBLES
+func hide_water_bubbles():
+	if $Bubbles_Anim.visible:
+		$Bubbles_Anim.stop()
+		$Bubbles_Anim.visible = false
+
+
+#SHOW WATER BUBBLES
+func show_water_bubbles():
+	if !$Bubbles_Anim.visible:
+		$Bubbles_Anim.visible = true
+		$Bubbles_Anim.play("Bubbles")
+
+
+#HIDE HASTED ANIMATION WHEN NECESSARY
+func hide_haste_effects():
+	if $PassiveEffects/MinorHaste_Ani.visible:
+		$PassiveEffects/MinorHaste_Ani.visible = false
+		$PassiveEffects/MinorHaste_Ani.stop()
+		$PassiveEffects/MinorHaste_Ani.frame = 0
+
+
+#SHOW HASTED EFFECT		
+func show_haste_effects():
+	if !$PassiveEffects/MinorHaste_Ani.visible:	
+		$PassiveEffects/MinorHaste_Ani.visible = true
+		$PassiveEffects/MinorHaste_Ani.play("Hasted")
+		
+#*** END OF TOGGLE FUNCTIONS ***
+
 					
 #IS THE ANIMATION DONE?
 func _on_Player_Anim_animation_finished():

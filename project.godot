@@ -26,6 +26,10 @@ Skills="*res://Skills.tscn"
 SkillChecks="*res://SkillChecks.tscn"
 AttackMode="*res://AttackMode.tscn"
 Animations="*res://Animations.tscn"
+RangedAttackTypes="*res://RangedAttackTypes.tscn"
+MeleeAttackTypes="*res://MeleeAttackTypes.tscn"
+SpecialEffectTypes="*res://SpecialEffectTypes.tscn"
+PassiveSkills="*res://PassiveSkills.tscn"
 
 [display]
 

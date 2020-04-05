@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=2]
+[gd_scene load_steps=98 format=2]
 
 [ext_resource path="res://sprites/player/v1/player_v1_03.png" type="Texture" id=1]
 [ext_resource path="res://sprites/player/v1/player_v1_02.png" type="Texture" id=2]
@@ -84,6 +84,13 @@
 [ext_resource path="res://sprites/player/v1/player_melee_death_7.png" type="Texture" id=82]
 [ext_resource path="res://sprites/player/v1/player_melee_death_2.png" type="Texture" id=83]
 [ext_resource path="res://sprites/player/v1/player_melee_death_3.png" type="Texture" id=84]
+[ext_resource path="res://effects/passive/minor_haste/minor_haste_3.png" type="Texture" id=85]
+[ext_resource path="res://effects/passive/minor_haste/minor_haste_1.png" type="Texture" id=86]
+[ext_resource path="res://effects/passive/minor_haste/minor_haste_2.png" type="Texture" id=87]
+[ext_resource path="res://effects/passive/minor_haste/minor_haste_0.png" type="Texture" id=88]
+[ext_resource path="res://effects/passive/minor_haste/minor_haste_4.png" type="Texture" id=89]
+[ext_resource path="res://effects/passive/minor_haste/minor_haste_6.png" type="Texture" id=90]
+[ext_resource path="res://effects/passive/minor_haste/minor_haste_5.png" type="Texture" id=91]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -193,36 +200,44 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 6, 8 )
 
-[sub_resource type="RectangleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 5.23918, 5.81005 )
 
-[sub_resource type="SpriteFrames" id=5]
+[sub_resource type="SpriteFrames" id=4]
 animations = [ {
 "frames": [ ExtResource( 41 ), ExtResource( 40 ), ExtResource( 37 ), ExtResource( 43 ), ExtResource( 39 ), ExtResource( 38 ), ExtResource( 42 ), ExtResource( 41 ), ExtResource( 40 ), ExtResource( 37 ), ExtResource( 43 ), ExtResource( 39 ), ExtResource( 38 ), ExtResource( 42 ) ],
 "loop": true,
 "name": "AmmoPicked",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 31 ), ExtResource( 35 ), ExtResource( 36 ), ExtResource( 32 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 31 ), ExtResource( 35 ), ExtResource( 36 ), ExtResource( 32 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 34 ) ],
-"loop": true,
-"name": "ArmorPicked",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 25 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 30 ), ExtResource( 27 ), ExtResource( 25 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 30 ), ExtResource( 27 ), ExtResource( 29 ), ExtResource( 29 ) ],
 "loop": true,
 "name": "HPPicked",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 31 ), ExtResource( 35 ), ExtResource( 36 ), ExtResource( 32 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 31 ), ExtResource( 35 ), ExtResource( 36 ), ExtResource( 32 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 34 ) ],
+"loop": true,
+"name": "ArmorPicked",
+"speed": 5.0
 } ]
 
-[sub_resource type="SpriteFrames" id=6]
+[sub_resource type="SpriteFrames" id=5]
 animations = [ {
 "frames": [ ExtResource( 61 ), ExtResource( 62 ), ExtResource( 60 ), ExtResource( 59 ) ],
 "loop": true,
 "name": "Bubbles",
 "speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=6]
+animations = [ {
+"frames": [ ExtResource( 88 ), ExtResource( 86 ), ExtResource( 87 ), ExtResource( 85 ), ExtResource( 89 ), ExtResource( 91 ), ExtResource( 90 ) ],
+"loop": true,
+"name": "Hasted",
+"speed": 25.0
 } ]
 
 [node name="Player" type="KinematicBody2D"]
@@ -239,11 +254,11 @@ animation = "MeleeAttack"
 frame = 4
 
 [node name="Player_Hitbox" type="CollisionShape2D" parent="."]
-shape = SubResource( 3 )
+shape = SubResource( 2 )
 
 [node name="Player_Duckbox" type="CollisionShape2D" parent="."]
 position = Vector2( -1.38886, 2.19294 )
-shape = SubResource( 4 )
+shape = SubResource( 3 )
 disabled = true
 
 [node name="MeleeHitPoint" type="Position2D" parent="."]
@@ -286,7 +301,7 @@ wait_time = 3.0
 [node name="Pick_Anim" type="AnimatedSprite" parent="."]
 visible = false
 scale = Vector2( 2, 2 )
-frames = SubResource( 5 )
+frames = SubResource( 4 )
 animation = "AmmoPicked"
 
 [node name="ShootCDTimer" type="Timer" parent="."]
@@ -300,9 +315,9 @@ one_shot = true
 
 [node name="Bubbles_Anim" type="AnimatedSprite" parent="."]
 position = Vector2( 10.3207, -1.70516 )
-frames = SubResource( 6 )
+frames = SubResource( 5 )
 animation = "Bubbles"
-frame = 1
+frame = 2
 playing = true
 __meta__ = {
 "_edit_group_": true
@@ -316,6 +331,18 @@ position = Vector2( -9.53674e-07, -7.67321 )
 
 [node name="BubblesOrigin" type="Position2D" parent="."]
 position = Vector2( 5.71228, -5.37125 )
+
+[node name="PassiveEffects" type="Node2D" parent="."]
+
+[node name="MinorHaste_Ani" type="AnimatedSprite" parent="PassiveEffects"]
+modulate = Color( 1, 1, 1, 0.588235 )
+position = Vector2( -14.6293, -0.892015 )
+scale = Vector2( 1.75, 1.75 )
+frames = SubResource( 6 )
+animation = "Hasted"
+__meta__ = {
+"_edit_group_": true
+}
 [connection signal="animation_finished" from="Player_Anim" to="." method="_on_Player_Anim_animation_finished"]
 [connection signal="timeout" from="PulseStopTimer" to="." method="_on_PulseStopTimer_timeout"]
 [connection signal="timeout" from="PickupStopTimer" to="." method="_on_PickupStopTimer_timeout"]

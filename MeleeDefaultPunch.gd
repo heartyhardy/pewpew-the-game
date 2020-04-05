@@ -1,6 +1,7 @@
 extends Area2D
 
 export(int) var damage = 25
+export(float) var cooldown = 0.35
 
 const SPEED = 50
 
