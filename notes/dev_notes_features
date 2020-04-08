@@ -18,6 +18,10 @@ Features to be implemented
 14. Active traits/skills **DONE**
 15. Disable Haste when underwater **DONE**
 16. MELEE uppercut and kick
+17. Breakable Tiles **DONE**
+18. Tile types Singleton **DONE**
+19. Moving Platforms **DONE**
+20. Breakable tiles mass destruction **DONE**
 
 
 BUGS/ISSUES
@@ -25,4 +29,4 @@ BUGS/ISSUES
 * DUCK + SPACE gets stuck sometimes
 * WEAPON/MELEE CD needs a revisit
 * WATER SPLASHES TWICE WHEN PLAYER IS NEAR TILE 19
-* HP BLINK in HUD not working properly
+* HP BLINK in HUD not working properly **FIXED**

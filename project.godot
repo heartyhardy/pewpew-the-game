@@ -30,6 +30,7 @@ RangedAttackTypes="*res://RangedAttackTypes.tscn"
 MeleeAttackTypes="*res://MeleeAttackTypes.tscn"
 SpecialEffectTypes="*res://SpecialEffectTypes.tscn"
 PassiveSkills="*res://PassiveSkills.tscn"
+TileTypes="*res://TileTypes.tscn"
 
 [display]
 
@@ -74,6 +75,7 @@ texture={
 2d_physics/layer_7="grass"
 2d_physics/layer_8="trees"
 2d_physics/layer_9="critters"
+2d_physics/layer_10="platforms"
 
 [rendering]
 

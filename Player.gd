@@ -12,7 +12,7 @@ export(int) var oxygen_consuption = 5
 
 export(int) var buoyancy = 5
 
-const GRAVITY = 10
+const GRAVITY = 650
 const FLOOR = Vector2(0, -1)
 
 var velocity = Vector2()
@@ -21,6 +21,7 @@ var submerged_velocity = Vector2()
 var attack_mode = AttackMode.get_attack_mode()
 
 var is_on_ground = false
+var is_jumping = false
 var is_attacking = false
 var is_ducked = false
 var is_alive = true
@@ -86,11 +87,11 @@ func _physics_process(delta):
 	
 #	DETERMINE THE TILE PLAYER IS SITTING ON CURRENTLY
 	var tile = get_colliding_tile()
-	if tile[0] >= 19:
+	if tile[0] >= TileTypes.TILE_TYPES.TILE_WATER_SURFACE:
 		is_submerged = true
 		submerged_velocity.x = 0
 		submerged_velocity.y = buoyancy
-	elif tile[0] == -1:
+	elif tile[0] == TileTypes.TILE_TYPES.TILE_INVALID_TILE:
 		is_submerged = false		
 		
 	
@@ -100,7 +101,7 @@ func _physics_process(delta):
 		PlayerGlobals.set("is_on_ground", true)
 		PlayerGlobals.set("is_submerged", false)
 				
-		handle_ground_movement()
+		handle_ground_movement(delta)
 	elif is_submerged:		
 #	UNDERWATER MOVEMENT
 #		SET PLAYER GLOBAL STATE
@@ -118,12 +119,12 @@ func water_splash():
 		return
 		
 	var tile = get_colliding_tile()
-	if tile[0] in [16, 19] and !is_on_floor():
+	if tile[0] in [TileTypes.TILE_TYPES.TILE_WATER_SHALLOW, TileTypes.TILE_TYPES.TILE_WATER_SURFACE] and !is_on_floor():
 		is_water_splashed = true
 		var splash_pos = Vector2((tile[1].x * tile[2].cell_size.x)
 		 + tile[2].cell_size.x/2, (tile[1].y * tile[2].cell_size.y) - 6)
 #		GET WATER EFFECT FROM PRELOADER
-		var splash = SpecialEffectTypes.get_special_effect(1).instance()
+		var splash = SpecialEffectTypes.get_special_effect(SpecialEffectTypes.EFFECT.WATER_SPLASH).instance()
 		get_parent().add_child(splash)
 		splash.position = splash_pos
 	$WaterSplashTimer.start()
@@ -131,7 +132,7 @@ func water_splash():
 		
 		
 #GROUND MOVEMENT HANDLER
-func handle_ground_movement():
+func handle_ground_movement(delta):
 #	HIDE BUBBLES
 	hide_water_bubbles()
 	
@@ -146,7 +147,7 @@ func handle_ground_movement():
 #	HORIZONTAL MOVEMENT
 	if Input.is_action_pressed("ui_right") and !is_ducked and !is_taking_damage and is_alive:			
 		if !is_attacking or !is_on_floor():
-			velocity.x = PlayerGlobals.get_speed()
+			velocity.x = lerp(velocity.x, PlayerGlobals.get_speed(), 0.1)
 			if !is_attacking:
 				$Player_Anim.play(Animations.get_animation("RUN", attack_mode))
 				$Player_Anim.flip_h = false				
@@ -157,7 +158,7 @@ func handle_ground_movement():
 					$PassiveEffects/MinorHaste_Ani.flip_h = false					
 	elif Input.is_action_pressed("ui_left") and !is_ducked and !is_taking_damage and is_alive:			
 		if !is_attacking or !is_on_floor():
-			velocity.x = -PlayerGlobals.get_speed()
+			velocity.x = lerp(velocity.x, -PlayerGlobals.get_speed(), 0.1)
 			if !is_attacking:
 				$Player_Anim.play(Animations.get_animation("RUN", attack_mode))
 				$Player_Anim.flip_h = true	
@@ -167,7 +168,7 @@ func handle_ground_movement():
 					$PassiveEffects/MinorHaste_Ani.position *= -1
 					$PassiveEffects/MinorHaste_Ani.flip_h = true
 	else:
-		velocity.x = 0
+		velocity.x = lerp(velocity.x, 0, 0.2)
 		if is_on_ground and !is_attacking and is_alive and !is_ducked and !is_taking_damage:
 			$Player_Anim.play(Animations.get_animation("IDLE", attack_mode))
 		if is_on_ground and !is_attacking and is_alive and is_ducked and !is_taking_damage:
@@ -180,11 +181,17 @@ func handle_ground_movement():
 	if Input.is_action_pressed("ui_up") and !is_ducked and is_on_ground and is_alive:
 		if !is_attacking:
 			velocity.y = PlayerGlobals.get_jump_speed()
+			is_jumping = true
 			is_on_ground = false
+	
+#	CHECK IF PLAYER IS FALLING		
+	if is_jumping and velocity.y > 0:
+		is_jumping = false
+		
 #	DUCK MODE
 	if Input.is_action_just_pressed("ui_down") and is_on_ground and is_alive:
 		if !is_ducked:
-			velocity.x = 0
+			velocity.x = lerp(velocity.x, 0, 0.5)
 			duck(true)
 			$Player_Anim.play(Animations.get_animation("DUCK", attack_mode))
 		elif is_ducked:
@@ -211,7 +218,7 @@ func handle_ground_movement():
 		
 	
 #	PROCESSING GRAVITY
-	velocity.y += GRAVITY
+	velocity.y += GRAVITY * delta
 	
 #	IS PLAYER ON FLOOR?
 	if is_on_floor() and is_alive:
@@ -225,8 +232,13 @@ func handle_ground_movement():
 				$Player_Anim.play(Animations.get_animation("JUMP", attack_mode))
 			else:
 				$Player_Anim.play(Animations.get_animation("FALL", attack_mode))
+	
+#	SNAP SETTINGS
+	var snap = Vector2(0, 8)
+	if is_jumping:
+		snap = Vector2()
 		
-	velocity = move_and_slide(velocity, FLOOR)
+	velocity = move_and_slide_with_snap(velocity, snap, FLOOR)
 
 
 #UNDERWATERMOVEMENT HANDLER
@@ -275,7 +287,7 @@ func handle_underwater_movement(collided_tile: Array):
 		
 #	VERTICAL MOVEMENT
 	if Input.is_action_pressed("ui_up"):
-		if collided_tile[0] != 19:
+		if collided_tile[0] != TileTypes.TILE_TYPES.TILE_WATER_SURFACE:
 			if Input.is_action_pressed("ui_up") and (!Input.is_action_pressed("ui_left") and !Input.is_action_pressed("ui_right")):
 #				POSITION THE BUBBLES
 				if sign($BubblePosVertical.position.y) == 1:
@@ -283,7 +295,7 @@ func handle_underwater_movement(collided_tile: Array):
 				$Bubbles_Anim.position = $BubblePosVertical.position
 				$Player_Anim.play("SwimUp")
 			submerged_velocity.y += -swim_speed * 2
-		elif collided_tile[0] == 19:			
+		elif collided_tile[0] == TileTypes.TILE_TYPES.TILE_WATER_SURFACE:			
 			is_submerged = false
 			velocity.y = PlayerGlobals.get_jump_speed()
 			velocity = move_and_slide(velocity, FLOOR)
@@ -457,8 +469,14 @@ func turn_towards_enemy(hit_direction):
 	if hit_direction == sign($ShootPoint.position.x):
 		if $Player_Anim.flip_h:
 			$Player_Anim.flip_h = false
+			$PassiveEffects/MinorHaste_Ani.flip_h = false
+			if sign($PassiveEffects/MinorHaste_Ani.position.x) == 1:
+				$PassiveEffects/MinorHaste_Ani.position.x *= -1
 		elif !$Player_Anim.flip_h:
 			$Player_Anim.flip_h = true
+			$PassiveEffects/MinorHaste_Ani.flip_h = true
+			if sign($PassiveEffects/MinorHaste_Ani.position.x) == -1:
+				$PassiveEffects/MinorHaste_Ani.position.x *= -1	
 		$ShootPoint.position.x *= -1
 	
 
@@ -575,3 +593,5 @@ func _on_OxygenTimer_timeout():
 		current_oxygen = 0
 		PlayerGlobals.set_current_oxygen(0)
 		on_enemy_hit(oxygen_consuption)
+		
+
