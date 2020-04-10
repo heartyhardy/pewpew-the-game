@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=2]
+[gd_scene load_steps=108 format=2]
 
 [ext_resource path="res://sprites/player/v1/player_v1_03.png" type="Texture" id=1]
 [ext_resource path="res://sprites/player/v1/player_v1_02.png" type="Texture" id=2]
@@ -92,6 +92,9 @@
 [ext_resource path="res://effects/passive/minor_haste/minor_haste_6.png" type="Texture" id=90]
 [ext_resource path="res://effects/passive/minor_haste/minor_haste_5.png" type="Texture" id=91]
 [ext_resource path="res://OxygenBar.tscn" type="PackedScene" id=92]
+[ext_resource path="res://effects/dust/dust_wake_onfall_2.png" type="Texture" id=93]
+[ext_resource path="res://effects/dust/dust_wake_onfall_0.png" type="Texture" id=94]
+[ext_resource path="res://effects/dust/dust_wake_onfall_1.png" type="Texture" id=95]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -214,14 +217,14 @@ animations = [ {
 "name": "AmmoPicked",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 31 ), ExtResource( 35 ), ExtResource( 36 ), ExtResource( 32 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 31 ), ExtResource( 35 ), ExtResource( 36 ), ExtResource( 32 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 34 ) ],
-"loop": true,
-"name": "ArmorPicked",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 25 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 30 ), ExtResource( 27 ), ExtResource( 25 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 30 ), ExtResource( 27 ), ExtResource( 29 ), ExtResource( 29 ) ],
 "loop": true,
 "name": "HPPicked",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 31 ), ExtResource( 35 ), ExtResource( 36 ), ExtResource( 32 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 31 ), ExtResource( 35 ), ExtResource( 36 ), ExtResource( 32 ), ExtResource( 33 ), ExtResource( 34 ), ExtResource( 34 ) ],
+"loop": true,
+"name": "ArmorPicked",
 "speed": 5.0
 } ]
 
@@ -240,6 +243,52 @@ animations = [ {
 "name": "Hasted",
 "speed": 25.0
 } ]
+
+[sub_resource type="Gradient" id=7]
+offsets = PoolRealArray( 0.0133333, 0.306667, 0.973333, 1 )
+colors = PoolColorArray( 0.678431, 0.314614, 0.188235, 1, 0.220638, 0.671875, 0.110229, 0.960784, 0.803922, 0, 1, 0.784314, 0.809651, 0.870588, 0.270588, 0.921569 )
+
+[sub_resource type="GradientTexture" id=8]
+gradient = SubResource( 7 )
+
+[sub_resource type="Curve" id=9]
+_data = [ Vector2( 0, 0.981818 ), 0.0, -0.0193676, 0, 0, Vector2( 1, 0.019428 ), -3.11818, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=10]
+curve = SubResource( 9 )
+
+[sub_resource type="ParticlesMaterial" id=11]
+lifetime_randomness = 1.0
+emission_shape = 2
+emission_box_extents = Vector3( 1, 5, 1 )
+flag_disable_z = true
+direction = Vector3( 1, 0.5, 0 )
+gravity = Vector3( -75, 25, 0 )
+initial_velocity = 55.0
+initial_velocity_random = 1.0
+angular_velocity = 90.0
+angular_velocity_random = 1.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+radial_accel = -100.0
+radial_accel_random = 1.0
+tangential_accel = 50.0
+tangential_accel_random = 0.25
+damping = 50.0
+damping_random = 0.5
+scale = 0.35
+scale_random = 1.0
+scale_curve = SubResource( 10 )
+color_ramp = SubResource( 8 )
+
+[sub_resource type="AnimatedTexture" id=12]
+frames = 3
+fps = 7.0
+frame_0/texture = ExtResource( 94 )
+frame_1/texture = ExtResource( 95 )
+frame_1/delay_sec = 0.0
+frame_2/texture = ExtResource( 93 )
+frame_2/delay_sec = 0.0
 
 [node name="Player" type="KinematicBody2D"]
 collision_mask = 22
@@ -327,7 +376,6 @@ one_shot = true
 position = Vector2( 10.3207, -1.70516 )
 frames = SubResource( 5 )
 animation = "Bubbles"
-frame = 3
 playing = true
 __meta__ = {
 "_edit_group_": true
@@ -353,6 +401,25 @@ animation = "Hasted"
 __meta__ = {
 "_edit_group_": true
 }
+
+[node name="DustOnLanding" type="Particles2D" parent="."]
+position = Vector2( 0, 8 )
+rotation = -1.5708
+emitting = false
+amount = 100
+lifetime = 0.5
+one_shot = true
+preprocess = 2.0
+speed_scale = 2.0
+explosiveness = 0.5
+randomness = 0.25
+local_coords = false
+process_material = SubResource( 11 )
+texture = SubResource( 12 )
+
+[node name="DustRay" type="RayCast2D" parent="."]
+cast_to = Vector2( 0, 32 )
+collision_mask = 513
 [connection signal="timeout" from="OxygenTimer" to="." method="_on_OxygenTimer_timeout"]
 [connection signal="animation_finished" from="Player_Anim" to="." method="_on_Player_Anim_animation_finished"]
 [connection signal="timeout" from="PulseStopTimer" to="." method="_on_PulseStopTimer_timeout"]

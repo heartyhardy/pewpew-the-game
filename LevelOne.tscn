@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://tilesets/basic_tileset_v1.tres" type="TileSet" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
@@ -24,16 +24,23 @@
 [ext_resource path="res://MovingPlatform.tscn" type="PackedScene" id=22]
 [ext_resource path="res://MovingPlatformMedium.tscn" type="PackedScene" id=23]
 [ext_resource path="res://FallingPlatform.tscn" type="PackedScene" id=24]
+[ext_resource path="res://BaaBaa.tscn" type="PackedScene" id=25]
+[ext_resource path="res://DialogUI.tscn" type="PackedScene" id=26]
 
 [sub_resource type="CameraTexture" id=1]
 
 [node name="LevelOne" type="Node2D"]
 
+[node name="Dialogs" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="DialogUI" parent="Dialogs" instance=ExtResource( 26 )]
+
 [node name="HUDLayer" type="CanvasLayer" parent="."]
 
 [node name="HUD" parent="HUDLayer" instance=ExtResource( 4 )]
+anchor_left = 0.0
 anchor_right = 0.0
-anchor_bottom = 0.0
 margin_left = 315.243
 margin_top = 6.61013
 margin_right = 315.243
@@ -41,6 +48,11 @@ margin_bottom = 6.61013
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 16, 144 )
+
+[node name="NPCs" type="Node2D" parent="."]
+
+[node name="BaaBaa" parent="NPCs" instance=ExtResource( 25 )]
+position = Vector2( 1488, -16 )
 
 [node name="MovingPlatforms" type="Node2D" parent="."]
 
@@ -54,6 +66,20 @@ move_to = Vector2( 256, 0 )
 [node name="MovingPlatformMedium2" parent="MovingPlatforms" instance=ExtResource( 23 )]
 position = Vector2( 1328, 8 )
 move_to = Vector2( 0, 110 )
+
+[node name="FallingPlatforms" type="Node2D" parent="."]
+
+[node name="FallingPlatform" parent="FallingPlatforms" instance=ExtResource( 24 )]
+position = Vector2( 48, 88 )
+
+[node name="FallingPlatform2" parent="FallingPlatforms" instance=ExtResource( 24 )]
+position = Vector2( 1160, 16 )
+
+[node name="FallingPlatform3" parent="FallingPlatforms" instance=ExtResource( 24 )]
+position = Vector2( 1216, 16 )
+
+[node name="FallingPlatform4" parent="FallingPlatforms" instance=ExtResource( 24 )]
+position = Vector2( 1272, 16 )
 
 [node name="Enemies" type="Node2D" parent="."]
 
@@ -247,6 +273,22 @@ grass_type = 2
 position = Vector2( 1368, 152 )
 grass_type = 2
 
+[node name="Grass33" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 1432, -8 )
+grass_type = 3
+
+[node name="Grass36" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 1416, -8 )
+grass_type = 3
+
+[node name="Grass34" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 1464, -8 )
+grass_type = 3
+
+[node name="Grass35" parent="Grass" instance=ExtResource( 17 )]
+position = Vector2( 1512, -8 )
+grass_type = 3
+
 [node name="Grass31" parent="Grass" instance=ExtResource( 17 )]
 position = Vector2( 1352, 152 )
 grass_type = 3
@@ -407,7 +449,4 @@ tile_data = PoolIntArray( -6, 0, 0, -1, 0, 0, -65532, 0, 0 )
 __meta__ = {
 "_edit_lock_": true
 }
-
-[node name="FallingPlatform" parent="." instance=ExtResource( 24 )]
-position = Vector2( 48, 88 )
 [connection signal="ready" from="Player" to="HUDLayer/HUD" method="_on_Player_ready"]

@@ -76,6 +76,7 @@ texture={
 2d_physics/layer_8="trees"
 2d_physics/layer_9="critters"
 2d_physics/layer_10="platforms"
+2d_physics/layer_11="npcs"
 
 [rendering]
 

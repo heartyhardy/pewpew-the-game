@@ -69,6 +69,16 @@ func _on_Bullet_Visibility_screen_exited():
 func _on_RegularBullet_body_entered(body):
 	if body.name != 'TileMap':		
 		var b_type = body.get_meta('TAG')
-		if b_type == 'ENEMY':
-			body.hit_by_player(damage)
+		match b_type:
+			"ENEMY":
+				if body.has_method("hit_by_player"):
+					body.hit_by_player(damage)
+			"BAABAA":
+				if body.has_method("hit_by_player") and body.has_method("get_dodge_percentage"):
+					var is_dodged = SkillChecks.can_dodge(body.get_dodge_percentage())
+					if is_dodged:
+						body.hit_by_player(damage, is_dodged)
+						return
+					else:
+						body.hit_by_player(damage, false)		
 	queue_free()

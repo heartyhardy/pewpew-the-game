@@ -39,7 +39,8 @@ func _physics_process(delta):
 
 
 func _on_RespawnNotifier_screen_exited():
-	$RespawnTimer.start()
+	if is_instance_valid(respawntimer) and respawntimer.is_stopped():
+		respawntimer.start()
 
 
 func _on_RespawnTimer_timeout():

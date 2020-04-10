@@ -33,6 +33,8 @@ var is_submerged = false
 var is_out_of_breath = false
 
 onready var oxygenbar = $OxygenBar
+onready var dustray = $DustRay
+onready var dust_particles = $DustOnLanding
 
 func _ready():
 
@@ -143,6 +145,13 @@ func handle_ground_movement(delta):
 		show_haste_effects()
 	elif !attack_mode == AttackMode.ATTACK_MODES.MELEE:
 		hide_haste_effects()
+	
+	if dustray.is_colliding():
+		dust_particles.emitting = true
+		dustray.enabled = false
+		
+	if !is_jumping and velocity.y > 100 and !is_on_ground:
+		dustray.enabled = true
 	
 #	HORIZONTAL MOVEMENT
 	if Input.is_action_pressed("ui_right") and !is_ducked and !is_taking_damage and is_alive:			
