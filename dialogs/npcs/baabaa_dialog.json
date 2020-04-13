@@ -1,0 +1,92 @@
+{
+	"speaker": "BaaBaa",
+	"0":{
+		"speech":[
+			{
+				"caption": "Oh hey there kid!",
+				"completed":false
+			},
+			{
+				"caption":"Is that a peashooter?",
+				"completed":false
+			},
+			{
+				"caption":"Know how to shoot it?",
+				"completed":false
+			}
+		],
+		"unlocked":true,
+		"completed": false
+	},
+	"1":{
+		"speech":[
+			{
+				"caption":"Let's play a game",
+				"completed":false
+			},
+			{
+				"caption": "You shoot me and I'll try to dodge",
+				"completed":false
+			},
+			{
+				"caption":"If you hit me enough",
+				"completed":false
+			},
+			{
+				"caption":"I'll teach you something cool",
+				"completed":false
+			},
+			{
+				"caption":"Deal?",
+				"completed":false
+			}
+		],
+		"unlocked": true,
+		"completed":false
+	},
+	"2":{
+		"speech":[
+			{
+				"caption":"Ahh..You're back!",
+				"completed":false
+			},
+			{
+				"caption":"Rules are simple",
+				"completed":false
+			},
+			{
+				"caption":"You hit me enough",
+				"completed":false
+			},
+			{
+				"caption":"I'll teach you a cool trick!",
+				"completed":false
+			},
+			{
+				"caption":"Come come, I don't have all day!",
+				"completed":false
+			}		
+		],
+		"resume":true,
+		"unlocked": false,
+		"completed":false
+	},
+	"3":{
+		"speech":[
+			{
+				"caption":"Kid's these days can shoot straight!",
+				"completed":false
+			},
+			{
+				"caption":"Now you know how to dodge!",
+				"completed":false
+			},
+			{
+				"caption":"Go save us all from this menace kid!",
+				"completed":false
+			}			
+		],
+		"unlocked":false,
+		"completed":false
+	}
+}

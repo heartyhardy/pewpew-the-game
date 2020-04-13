@@ -21,6 +21,7 @@ var maximum_oxygen
 #PLAYER STATUS
 var is_on_ground = false
 var is_submerged = false
+var is_in_cutscene = false
 
 func _ready():
 	pass
@@ -63,6 +64,11 @@ func get_current_oxygen():
 #GET MAX OXYGEN
 func get_max_oxygen():
 	return maximum_oxygen
+	
+
+#GET IS IN CUTSCENE MODE
+func get_cutscene_mode():
+	return is_in_cutscene
 	
 
 #SET PLAYER HP
@@ -118,4 +124,10 @@ func set_max_oxygen(oxygen):
 	if oxygen <= MAX_OXYGEN:
 		maximum_oxygen = oxygen
 
+
+#SET CUTSCENE MODE
+func set_cutscene_mode(enabled:bool):
+	is_in_cutscene = enabled
+	if player.has_method("set_cutscene_mode"):
+		player.set_cutscene_mode(enabled)
 

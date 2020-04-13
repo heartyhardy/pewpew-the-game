@@ -1,9 +1,12 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://ui/common/pewpew_text_backdrop-1.png" type="Texture" id=1]
 [ext_resource path="res://ui/portraits/baabaa_portrait_1.png" type="Texture" id=2]
 [ext_resource path="res://ui/portraits/baabaa_portrait_0.png" type="Texture" id=3]
 [ext_resource path="res://ui/portraits/baabaa_portrait_2.png" type="Texture" id=4]
+[ext_resource path="res://ui/Themes/Captions_Theme.tres" type="Theme" id=5]
+[ext_resource path="res://ui/Fonts/Chava-Regular.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://DialogUI.gd" type="Script" id=7]
 
 [sub_resource type="AnimatedTexture" id=1]
 frames = 3
@@ -14,9 +17,31 @@ frame_1/delay_sec = 0.0
 frame_2/texture = ExtResource( 4 )
 frame_2/delay_sec = 0.0
 
+[sub_resource type="DynamicFont" id=2]
+size = 10
+outline_size = 1
+outline_color = Color( 0.0666667, 0.00392157, 0.0235294, 1 )
+use_mipmaps = true
+use_filter = true
+extra_spacing_char = 2
+font_data = ExtResource( 6 )
+
+[sub_resource type="Theme" id=3]
+default_font = SubResource( 2 )
+Label/colors/font_color = Color( 0.823529, 0.541176, 0.207843, 1 )
+Label/colors/font_color_shadow = Color( 0.254902, 0.129412, 0.0352941, 0.694118 )
+Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
+Label/constants/line_spacing = 3
+Label/constants/shadow_as_outline = 0
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+Label/fonts/font = null
+Label/styles/normal = null
+
 [node name="DialogUI" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -41,7 +66,7 @@ patch_margin_top = 16
 patch_margin_right = 16
 patch_margin_bottom = 16
 
-[node name="TextureRect" type="TextureRect" parent="DialogMargins/DialogPanel"]
+[node name="Portrait" type="TextureRect" parent="DialogMargins/DialogPanel"]
 margin_left = 15.0
 margin_top = 8.57425
 margin_right = 63.0
@@ -53,3 +78,33 @@ flip_h = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Conversations" type="VBoxContainer" parent="DialogMargins/DialogPanel"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -255.0
+margin_top = -36.0
+margin_bottom = 36.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Speaker" type="Label" parent="DialogMargins/DialogPanel/Conversations"]
+margin_top = 24.0
+margin_right = 255.0
+margin_bottom = 36.0
+theme = SubResource( 3 )
+text = "BaaBaa"
+valign = 1
+
+[node name="Captions" type="Label" parent="DialogMargins/DialogPanel/Conversations"]
+margin_top = 40.0
+margin_right = 255.0
+margin_bottom = 48.0
+theme = ExtResource( 5 )
+custom_colors/font_color = Color( 0.454902, 0.784314, 0.92549, 1 )
+text = "Hey there kid!"
+valign = 1

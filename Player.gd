@@ -31,6 +31,7 @@ var is_grass_dodge_active = false
 var is_tree_heal_active = false
 var is_submerged = false
 var is_out_of_breath = false
+var is_in_cutscene = false
 
 onready var oxygenbar = $OxygenBar
 onready var dustray = $DustRay
@@ -154,7 +155,7 @@ func handle_ground_movement(delta):
 		dustray.enabled = true
 	
 #	HORIZONTAL MOVEMENT
-	if Input.is_action_pressed("ui_right") and !is_ducked and !is_taking_damage and is_alive:			
+	if Input.is_action_pressed("ui_right") and !is_ducked and !is_taking_damage and is_alive and not is_in_cutscene:			
 		if !is_attacking or !is_on_floor():
 			velocity.x = lerp(velocity.x, PlayerGlobals.get_speed(), 0.1)
 			if !is_attacking:
@@ -165,7 +166,7 @@ func handle_ground_movement(delta):
 					$MeleeHitPoint.position.x *= -1
 					$PassiveEffects/MinorHaste_Ani.position *= -1
 					$PassiveEffects/MinorHaste_Ani.flip_h = false					
-	elif Input.is_action_pressed("ui_left") and !is_ducked and !is_taking_damage and is_alive:			
+	elif Input.is_action_pressed("ui_left") and !is_ducked and !is_taking_damage and is_alive and not is_in_cutscene:			
 		if !is_attacking or !is_on_floor():
 			velocity.x = lerp(velocity.x, -PlayerGlobals.get_speed(), 0.1)
 			if !is_attacking:
@@ -187,7 +188,7 @@ func handle_ground_movement(delta):
 			
 	
 #	VERTICAL MOVEMENT
-	if Input.is_action_pressed("ui_up") and !is_ducked and is_on_ground and is_alive:
+	if Input.is_action_pressed("ui_up") and !is_ducked and is_on_ground and is_alive and not is_in_cutscene:
 		if !is_attacking:
 			velocity.y = PlayerGlobals.get_jump_speed()
 			is_jumping = true
@@ -198,7 +199,7 @@ func handle_ground_movement(delta):
 		is_jumping = false
 		
 #	DUCK MODE
-	if Input.is_action_just_pressed("ui_down") and is_on_ground and is_alive:
+	if Input.is_action_just_pressed("ui_down") and is_on_ground and is_alive and not is_in_cutscene:
 		if !is_ducked:
 			velocity.x = lerp(velocity.x, 0, 0.5)
 			duck(true)
@@ -545,6 +546,11 @@ func show_oxygenbar():
 func hide_oxygenbar():
 	if oxygenbar.visible:
 		oxygenbar.visible = false
+		
+
+func set_cutscene_mode(enabled:bool):
+	is_in_cutscene = enabled
+	
 		
 #*** END OF TOGGLE FUNCTIONS ***
 

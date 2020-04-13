@@ -31,6 +31,8 @@ MeleeAttackTypes="*res://MeleeAttackTypes.tscn"
 SpecialEffectTypes="*res://SpecialEffectTypes.tscn"
 PassiveSkills="*res://PassiveSkills.tscn"
 TileTypes="*res://TileTypes.tscn"
+JSONLoader="*res://JSONLoader.tscn"
+DialogMediator="*res://DialogMediator.tscn"
 
 [display]
 
