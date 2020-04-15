@@ -9,7 +9,7 @@ Features to be implemented
 5. Optional max heal for Medium Tree **DONE**
 6. Sheep random funny stuff
 7. Underwater sub region and player functionalities **DONE**
-8. First NPC to teach dodge skill
+8. First NPC to teach dodge skill **DONE**
 9. Melee attack *DONE*
 10. Fire attack and set environment on fire
 11. Think about funny stuff to add to game
@@ -22,7 +22,10 @@ Features to be implemented
 18. Tile types Singleton **DONE**
 19. Moving Platforms **DONE**
 20. Breakable tiles mass destruction **DONE**
-
+21. Dialog Cam needs tweening
+22. Cutscene mode player auto switch to gun
+23. Hide UI elements when in cutscene
+24. Secret Areas
 
 BUGS/ISSUES
 
@@ -30,3 +33,7 @@ BUGS/ISSUES
 * WEAPON/MELEE CD needs a revisit
 * WATER SPLASHES TWICE WHEN PLAYER IS NEAR TILE 19
 * HP BLINK in HUD not working properly **FIXED**
+* Breakable tiles visibility notifier auto fires even if tile not triggered
+* Timer start issue in breakable tiles
+* BAABAA quests starts immidiately if shot
+* MELEE attack bug (strange one, ranged attacks work, melee fires but no damage)

@@ -35,6 +35,7 @@
 layer = 2
 
 [node name="DialogUI" parent="Dialogs" instance=ExtResource( 26 )]
+visible = false
 
 [node name="HUDLayer" type="CanvasLayer" parent="."]
 

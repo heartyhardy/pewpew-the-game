@@ -32,3 +32,4 @@ func set_dialogui_visibility(show: bool):
 #IS DIALOG UI VISIBLE
 func is_dialog_visible() -> bool:
 	return dialog_visible
+

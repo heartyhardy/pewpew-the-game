@@ -6,6 +6,8 @@ export(int) var low_hp_limit = 25
 
 var player
 
+var is_hud_visible = true
+
 #TEXT COLORS
 var green = Color("#87c51c")
 var orange = Color("#f79b05")
@@ -16,6 +18,14 @@ func _on_Player_ready():
 
 # warning-ignore:unused_argument
 func _physics_process(delta):
+	
+#	SET HUD VISIBILITY IF ON CUTSCENE
+	if PlayerGlobals.is_in_cutscene:
+		is_hud_visible = false
+	else:
+		is_hud_visible = true
+		
+	self.visible = is_hud_visible
 	
 #	UPDATE LABEL TEXT AND COLORS
 	var hp = PlayerGlobals.get_hp()

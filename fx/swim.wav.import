@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/fx_raw.wav-70855d640a02d6ed975c1da158c8603a.sample"
+path="res://.import/swim.wav-917f0831f2b4ebd44d16ac7d2ef65efb.sample"
 
 [deps]
 
-source_file="res://fx/fx_raw.wav"
-dest_files=[ "res://.import/fx_raw.wav-70855d640a02d6ed975c1da158c8603a.sample" ]
+source_file="res://fx/swim.wav"
+dest_files=[ "res://.import/swim.wav-917f0831f2b4ebd44d16ac7d2ef65efb.sample" ]
 
 [params]
 

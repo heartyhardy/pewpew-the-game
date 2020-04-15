@@ -14,6 +14,7 @@ onready var hpbar = $HealthBar
 onready var heal_timer = $HealTimer
 onready var dialog_timer = $DialogTimer
 
+onready var quest_completed_fx = $FX/Quest_Complete
 
 var dialog_file = "res://dialogs/npcs/baabaa_dialog.json"
 var dialog_root = null
@@ -36,8 +37,19 @@ func _ready():
 func _physics_process(delta):
 	self.set_meta("TAG", "BAABAA")
 	look_at_player()
-
-	match quest_state:
+	
+#	IF PLAYER IN CONVERSATION, TURN TOWARDS BAABAA
+	if is_instance_valid(PlayerGlobals.player):
+		if is_in_conversation:
+			var direction = -1 if !baa_anim.flip_h else 1
+			player.turn_towards_enemy(sign(self.position.x * direction))
+			if PlayerGlobals.get_cutscene_mode():
+				player.switch_to_dialog_cam(self.position)
+		else:
+			if !PlayerGlobals.get_cutscene_mode():
+				player.switch_to_follow_cam()
+			
+	match quest_state:			
 		QUEST_STATE.NOT_STARTED:
 			if !is_in_conversation:
 				PlayerGlobals.set_cutscene_mode(false)
@@ -106,6 +118,8 @@ func converse():
 				exit_conversation()
 				DialogMediator.set_dialogui_visibility(false)
 		else:
+			if !quest_completed_fx.playing:
+				quest_completed_fx.play()
 			quest_state = QUEST_STATE.DISABLED
 			info_bubble.play("Complete")
 			PlayerGlobals.set_cutscene_mode(false)

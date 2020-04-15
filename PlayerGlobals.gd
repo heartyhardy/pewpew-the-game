@@ -127,7 +127,8 @@ func set_max_oxygen(oxygen):
 
 #SET CUTSCENE MODE
 func set_cutscene_mode(enabled:bool):
-	is_in_cutscene = enabled
-	if player.has_method("set_cutscene_mode"):
-		player.set_cutscene_mode(enabled)
+	if is_instance_valid(player):
+		is_in_cutscene = enabled
+		if player.has_method("set_cutscene_mode"):
+			player.set_cutscene_mode(enabled)
 

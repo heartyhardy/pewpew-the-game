@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/observer_roll.wav-4a20a90901254f99f52c51cdbb2d1f1b.sample"
+
+[deps]
+
+source_file="res://fx/observer_roll.wav"
+dest_files=[ "res://.import/observer_roll.wav-4a20a90901254f99f52c51cdbb2d1f1b.sample" ]
+
+[params]
+
+force/8_bit=true
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=true
+compress/mode=0

@@ -17,6 +17,7 @@ const FLOOR = Vector2(0, -1)
 
 var velocity = Vector2()
 var submerged_velocity = Vector2()
+var camera_offset_adjustment = Vector2(0,10.0)
 
 var attack_mode = AttackMode.get_attack_mode()
 
@@ -36,6 +37,19 @@ var is_in_cutscene = false
 onready var oxygenbar = $OxygenBar
 onready var dustray = $DustRay
 onready var dust_particles = $DustOnLanding
+
+onready var player_cam = $Player_Cam
+onready var camtween = $CameraTween
+
+onready var run_fx = $FX/RunFX
+onready var jump_fx = $FX/JumpFX
+onready var fall_fx = $FX/FallFX
+onready var death_fx = $FX/DeathFX
+onready var swim_fx = $FX/SwimFX
+
+var gun_default_fx: AudioStreamPlayer2D
+var melee_default_fx: AudioStreamPlayer2D
+
 
 func _ready():
 
@@ -60,17 +74,55 @@ func _ready():
 	oxygenbar.on_oxygen_updated(PlayerGlobals.get_max_oxygen())
 	oxygenbar.visible = false
 
+#	LOAD AUDIO FX
+	gun_default_fx = AudioStreamPlayer2D.new()
+	melee_default_fx = AudioStreamPlayer2D.new()
+	self.add_child(gun_default_fx)
+	self.add_child(melee_default_fx)
+	gun_default_fx.stream = preload("res://fx/gun_default.wav")
+	melee_default_fx.stream = preload("res://fx/melee_default.wav")
+	
+	
 
 #INPUT EVENTS
 func _input(event: InputEvent):
 	if event is InputEventKey and event.pressed:
 		match event.scancode:
 			KEY_V:
+#				ATTACK MODE CYCLE
 				attack_mode = AttackMode.cycle_attack_mode() 
 			KEY_1:
 				process_attack_switch(1)				
 			KEY_2:
 				process_attack_switch(2)
+			KEY_DOWN:
+#				CROUCH
+				handle_duck()
+			KEY_SPACE:
+#				MELEE/RANGED ATTACK
+				handle_attacks()
+	elif event is InputEventKey and !event.pressed:
+		match event.scancode:
+			KEY_RIGHT:
+				run_fx.stop()
+				if is_submerged:
+					swim_fx.stop()
+			KEY_LEFT:
+				run_fx.stop()
+				if is_submerged:
+					swim_fx.stop()
+			KEY_UP:
+				if is_submerged:
+					swim_fx.stop()
+			KEY_DOWN:
+				if is_on_ground and is_ducked:
+						duck(false)
+				if is_submerged:
+					swim_fx.stop()
+			KEY_SPACE:
+				if $Player_Anim.animation == "Shoot" or $Player_Anim.animation == "MeleeAttack":
+					if !$Player_Anim.playing:
+						is_attacking = false
 
 
 #PROCESS ATTACK SWITCH KEY		
@@ -136,6 +188,10 @@ func water_splash():
 		
 #GROUND MOVEMENT HANDLER
 func handle_ground_movement(delta):
+	
+#	STOP UNDERWATER FX
+	swim_fx.stop()
+	
 #	HIDE BUBBLES
 	hide_water_bubbles()
 	
@@ -158,6 +214,9 @@ func handle_ground_movement(delta):
 	if Input.is_action_pressed("ui_right") and !is_ducked and !is_taking_damage and is_alive and not is_in_cutscene:			
 		if !is_attacking or !is_on_floor():
 			velocity.x = lerp(velocity.x, PlayerGlobals.get_speed(), 0.1)
+#			PLAY RUN AUDIO FX
+			if !run_fx.playing and is_on_ground:
+				run_fx.play()
 			if !is_attacking:
 				$Player_Anim.play(Animations.get_animation("RUN", attack_mode))
 				$Player_Anim.flip_h = false				
@@ -169,6 +228,9 @@ func handle_ground_movement(delta):
 	elif Input.is_action_pressed("ui_left") and !is_ducked and !is_taking_damage and is_alive and not is_in_cutscene:			
 		if !is_attacking or !is_on_floor():
 			velocity.x = lerp(velocity.x, -PlayerGlobals.get_speed(), 0.1)
+#			PLAY RUN AUDIO FX
+			if !run_fx.playing and is_on_ground:
+				run_fx.play()
 			if !is_attacking:
 				$Player_Anim.play(Animations.get_animation("RUN", attack_mode))
 				$Player_Anim.flip_h = true	
@@ -187,45 +249,13 @@ func handle_ground_movement(delta):
 		hide_haste_effects()
 			
 	
-#	VERTICAL MOVEMENT
-	if Input.is_action_pressed("ui_up") and !is_ducked and is_on_ground and is_alive and not is_in_cutscene:
-		if !is_attacking:
-			velocity.y = PlayerGlobals.get_jump_speed()
-			is_jumping = true
-			is_on_ground = false
+##	VERTICAL MOVEMENT
+	if Input.is_action_pressed("ui_up"):
+		handle_jump()
 	
 #	CHECK IF PLAYER IS FALLING		
-	if is_jumping and velocity.y > 0:
-		is_jumping = false
-		
-#	DUCK MODE
-	if Input.is_action_just_pressed("ui_down") and is_on_ground and is_alive and not is_in_cutscene:
-		if !is_ducked:
-			velocity.x = lerp(velocity.x, 0, 0.5)
-			duck(true)
-			$Player_Anim.play(Animations.get_animation("DUCK", attack_mode))
-		elif is_ducked:
-			duck(false)
-
-		
-#	SHOOT IF PLAYER HAS AMMO
-	if Input.is_action_just_pressed("ui_select") and !is_attacking and is_alive:
-#		IF ATTACK MODE IS MELEE
-		if attack_mode == 1:
-			handle_melee_attacks()
-			return
-#		IF ATTACK MODE IS GUN
-		if attack_mode == 2:
-			handle_gun_attacks()
-			return
-		
-		
-#	STOP ATTACK MODE
-	if Input.is_action_just_released("ui_select"):
-		if $Player_Anim.animation == "Shoot" or $Player_Anim.animation == "MeleeAttack":
-			if !$Player_Anim.playing:
-				is_attacking = false
-		
+	if is_jumping and velocity.y >= 0:
+		is_jumping = false		
 	
 #	PROCESSING GRAVITY
 	velocity.y += GRAVITY * delta
@@ -238,10 +268,13 @@ func handle_ground_movement(delta):
 	else:
 		if !is_attacking and is_alive:
 			is_on_ground = false
+			run_fx.stop()
 			if velocity.y < 0:
 				$Player_Anim.play(Animations.get_animation("JUMP", attack_mode))
 			else:
 				$Player_Anim.play(Animations.get_animation("FALL", attack_mode))
+#				PLAY FALL SOUND FX
+				fall_fx.play()
 	
 #	SNAP SETTINGS
 	var snap = Vector2(0, 8)
@@ -265,8 +298,15 @@ func handle_underwater_movement(collided_tile: Array):
 	if $OxygenTimer.is_stopped():
 		$OxygenTimer.start()
 	
+#	IF DEAD RETURN AND PLAY DEATH ANIMATION
+	if !is_alive:
+		return
+	
 #	HORIZONTAL MOVEMENT
 	if Input.is_action_pressed("ui_left"):
+#		PLAY SWIM FX
+		if !swim_fx.playing:
+			swim_fx.play()
 #		SHOW BUBBLES IN THE RIGHT PLACE
 		if sign($BubblePosHorizontal.position.x) == 1:
 			$BubblePosHorizontal.position.x *= -1
@@ -275,6 +315,9 @@ func handle_underwater_movement(collided_tile: Array):
 		$Player_Anim.flip_h = true
 		submerged_velocity.x = -swim_speed
 	elif Input.is_action_pressed("ui_right"):
+#		PLAY SWIM FX
+		if !swim_fx.playing:
+			swim_fx.play()
 #		POSITION BUBBLES CORRECTLY
 		if sign($BubblePosHorizontal.position.x) == -1:
 			$BubblePosHorizontal.position.x *= -1
@@ -299,6 +342,9 @@ func handle_underwater_movement(collided_tile: Array):
 	if Input.is_action_pressed("ui_up"):
 		if collided_tile[0] != TileTypes.TILE_TYPES.TILE_WATER_SURFACE:
 			if Input.is_action_pressed("ui_up") and (!Input.is_action_pressed("ui_left") and !Input.is_action_pressed("ui_right")):
+		#		PLAY SWIM FX
+				if !swim_fx.playing:
+					swim_fx.play()
 #				POSITION THE BUBBLES
 				if sign($BubblePosVertical.position.y) == 1:
 					$BubblePosVertical.position.y *= -1
@@ -312,6 +358,9 @@ func handle_underwater_movement(collided_tile: Array):
 			return
 	elif Input.is_action_pressed("ui_down"):
 		if Input.is_action_pressed("ui_down") and (!Input.is_action_pressed("ui_left") and !Input.is_action_pressed("ui_right")):
+	#		PLAY SWIM FX
+			if !swim_fx.playing:
+				swim_fx.play()
 #			POSITION THE BUBBLES
 			if sign($BubblePosVertical.position.y) == -1:
 				$BubblePosVertical.position.y *= -1
@@ -333,7 +382,14 @@ func handle_melee_attacks():
 #			LATER CHANGE THIS SO PLAYER CAN CHASE AND HIT
 			velocity.x = 0
 		is_attacking = true
-		$Player_Anim.play("MeleeAttack")		
+		$Player_Anim.play("MeleeAttack")
+		
+		if !melee_default_fx.playing:
+			melee_default_fx.play()
+		else:
+			melee_default_fx.stop()
+			melee_default_fx.play()
+				
 		var melee_punch = MeleeAttackTypes.get_current_attack().instance()
 		melee_punch.set_direction(sign($MeleeHitPoint.position.x))
 		get_parent().add_child(melee_punch)
@@ -352,11 +408,17 @@ func handle_gun_attacks():
 	if is_on_floor():
 		velocity.x = 0
 	is_attacking = true
+			
 	reduce_one_from_ammo()
 	if is_ducked:
 		$Player_Anim.play("DuckShoot")
 	else:
 		$Player_Anim.play("Shoot")
+	
+	#PLAY RANGED ATTACK FX
+	if !gun_default_fx.playing:
+		gun_default_fx.play()
+	
 	var weapon_projectile = RangedAttackTypes.get_current_attack().instance()
 	weapon_projectile.set_direction(sign($ShootPoint.position.x))
 	get_parent().add_child(weapon_projectile)
@@ -364,16 +426,51 @@ func handle_gun_attacks():
 	$ShootCDTimer.wait_time = weapon_projectile.cooldown
 	$ShootCDTimer.start()	
 
+
+#DUCK (KEY DOWN HANDLER)
+func handle_duck():
+	if is_attacking:
+		return
+	
+	if is_on_ground and is_alive and !is_in_cutscene:
+		velocity.x = lerp(velocity.x, 0, 0.5)
+		duck(true)
+		if $Player_Anim.animation != "Dodge" and $Player_Anim.animation != "MeleeDodge":
+			$Player_Anim.play(Animations.get_animation("DUCK", attack_mode))
+
+
+#ATTACK (KEY SPACE) HANDLER
+func handle_attacks():
+	if is_alive:
+	#		IF ATTACK MODE IS MELEE
+		if attack_mode == 1 and !is_ducked:
+			handle_melee_attacks()
+	#		IF ATTACK MODE IS GUN
+		if attack_mode == 2:
+			handle_gun_attacks()
+		
+		
+#JUMP (KEY UP) HANDLER
+func handle_jump():	
+	if !is_ducked and is_on_ground and is_alive and not is_in_cutscene:
+		if !is_attacking:
+			velocity.y = PlayerGlobals.get_jump_speed()
+			is_jumping = true
+			is_on_ground = false
+	#			PLAY JUMP SOUND FX
+			jump_fx.play()
+			
+
 #SET DUCK ON/OFF
 func duck(enabled:bool)->void:
 	if enabled:
-		is_ducked = true
+		is_ducked = enabled
 		Skills.enable_skill("DODGE")
 		$Player_Hitbox.set_deferred("disabled", true)
 		$Player_Duckbox.set_deferred("disabled", false)
 		$ShootPoint.position.y = 1
 	else:
-		is_ducked = false
+		is_ducked = enabled
 		Skills.disable_skill("DODGE")
 		$Player_Hitbox.set_deferred("disabled", false)
 		$Player_Duckbox.set_deferred("disabled", true)
@@ -437,6 +534,8 @@ func on_player_death():
 	$PulseStopTimer.stop()
 	self.modulate = Color.white
 	is_alive = false
+	if !death_fx.playing:
+		death_fx.play()
 	$Player_Anim.play(Animations.get_animation("DEATH", attack_mode))
 	
 	
@@ -488,6 +587,20 @@ func turn_towards_enemy(hit_direction):
 			if sign($PassiveEffects/MinorHaste_Ani.position.x) == -1:
 				$PassiveEffects/MinorHaste_Ani.position.x *= -1	
 		$ShootPoint.position.x *= -1
+	
+	
+#SWITCH CAMERA TO DIALOG MODE
+func switch_to_dialog_cam(offsetpos:Vector2):
+	camtween.interpolate_property(player_cam, "zoom", player_cam.zoom, Vector2(0.5, 0.5), 0.35,Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	camtween.interpolate_property(player_cam, "offset", player_cam.offset, offsetpos + camera_offset_adjustment - player_cam.get_camera_position(), 0.35,Tween.TRANS_LINEAR,Tween.EASE_IN_OUT)
+	camtween.start()
+	
+	
+#SWITCH TO FOLLOW CAMERA(DEFAULT)
+func switch_to_follow_cam():
+	camtween.interpolate_property(player_cam, "zoom", player_cam.zoom, Vector2(1,1),0.35,Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	camtween.interpolate_property(player_cam, "offset", player_cam.offset, Vector2(0,0), 0.35,Tween.TRANS_LINEAR,Tween.EASE_IN_OUT)
+	camtween.start()
 	
 
 #IS PLAYER SUBMERGED/ NOT COUNTING SHALLOW WATER
@@ -609,4 +722,5 @@ func _on_OxygenTimer_timeout():
 		PlayerGlobals.set_current_oxygen(0)
 		on_enemy_hit(oxygen_consuption)
 		
+
 

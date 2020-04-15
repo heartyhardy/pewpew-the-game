@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://sprites/trainers/baabaa/baabaa_dodge_1.png" type="Texture" id=1]
 [ext_resource path="res://sprites/trainers/baabaa/baabaa_idle_1.png" type="Texture" id=2]
@@ -22,6 +22,7 @@
 [ext_resource path="res://ui/npc/info_bubble_complete_0.png" type="Texture" id=20]
 [ext_resource path="res://ui/npc/info_bubble_complete_5.png" type="Texture" id=21]
 [ext_resource path="res://ui/npc/info_bubble_complete_6.png" type="Texture" id=22]
+[ext_resource path="res://fx/quest_complete.wav" type="AudioStream" id=23]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -69,13 +70,14 @@ script = ExtResource( 4 )
 position = Vector2( 0, -24 )
 frames = SubResource( 1 )
 animation = "Complete"
+frame = 3
 playing = true
 
 [node name="Baa_Anim" type="AnimatedSprite" parent="."]
 scale = Vector2( 2, 2 )
 frames = SubResource( 2 )
 animation = "Idle"
-frame = 1
+frame = 2
 playing = true
 
 [node name="Baa_Hitbox" type="CollisionShape2D" parent="."]
@@ -101,6 +103,14 @@ shape = SubResource( 4 )
 
 [node name="DialogTimer" type="Timer" parent="."]
 wait_time = 2.0
+
+[node name="FX" type="Node2D" parent="."]
+
+[node name="Quest_Complete" type="AudioStreamPlayer2D" parent="FX"]
+position = Vector2( 0, -24 )
+stream = ExtResource( 23 )
+max_distance = 200.0
+attenuation = 0.5
 [connection signal="animation_finished" from="Baa_Anim" to="." method="_on_Baa_Anim_animation_finished"]
 [connection signal="timeout" from="HealTimer" to="." method="_on_HealTimer_timeout"]
 [connection signal="body_entered" from="ActiveArea" to="." method="_on_ActiveArea_body_entered"]

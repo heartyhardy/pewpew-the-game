@@ -18,23 +18,30 @@ var is_alive = true
 onready var hpbar = $HealthBar
 onready var armorbar = $ArmorBar
 
+onready var roll_fx = $FX/Observer_Roll
+
 func _ready():
 	set_meta("TAG", "ENEMY")
 	hpbar.on_maxhp_updated(hp)
 	hpbar.on_hp_updated(hp)
 	armorbar.on_max_armor_updated(armor)
 	armorbar.on_armor_updated(armor)
-	
+	if !roll_fx.playing:
+		roll_fx.play()
 
 func _physics_process(delta):
 	
 #	IF DEAD RETURN
 	if !is_alive:
+		roll_fx.stop()
 		return
 	
 #	MOVE NORMALLY IF NOT ATTACKING
 	if !is_attacking:
-		velocity.x = speed * direction
+		velocity.x = speed * direction		
+#		IF NOT ATTACKING PLAY ROLL FX
+		if !roll_fx.playing:
+			roll_fx.play()
 		
 #	APPLY GRAVITY	
 	velocity.y += GRAVITY
@@ -49,11 +56,13 @@ func _physics_process(delta):
 		
 
 #	CHANGE ANIMATION DEPENDING ON STATE
-	if !is_attacking:
+	if !is_attacking:		
 		$ObserverFireEffect.visible = false
 		$ObserverFireEffect/FireEffect.stop()
 		$Observer_Ani.play("Roll")
 	elif is_attacking:
+#		STOP ROLL FX IF ATTACKING
+		roll_fx.stop()
 		$Observer_Ani.play("Attack")	
 	
 	if !is_attacking:
