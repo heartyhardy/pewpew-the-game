@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=49 format=2]
+[gd_resource type="TileSet" load_steps=73 format=2]
 
 [ext_resource path="res://tiles/basic-tiles-v1.png" type="Texture" id=1]
 [ext_resource path="res://environment/water/default/water_base_0.png" type="Texture" id=2]
@@ -39,6 +39,28 @@
 [ext_resource path="res://effects/breakables/tiles/breakable_tile_lvl1_t1_3.png" type="Texture" id=37]
 [ext_resource path="res://effects/breakables/tiles/breakable_tile_lvl1_t1_5.png" type="Texture" id=38]
 [ext_resource path="res://effects/breakables/tiles/breakable_tile_lvl1_t1_4.png" type="Texture" id=39]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_06.png" type="Texture" id=40]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_04.png" type="Texture" id=41]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_07.png" type="Texture" id=42]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_01.png" type="Texture" id=43]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_05.png" type="Texture" id=44]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_02.png" type="Texture" id=45]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_03.png" type="Texture" id=46]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_bloody_02.png" type="Texture" id=47]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_08.png" type="Texture" id=48]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_09.png" type="Texture" id=49]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_10.png" type="Texture" id=50]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_00.png" type="Texture" id=51]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_bloody_00.png" type="Texture" id=52]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_bloody_05.png" type="Texture" id=53]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_bloody_04.png" type="Texture" id=54]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_bloody_03.png" type="Texture" id=55]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_bloody_06.png" type="Texture" id=56]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_bloody_07.png" type="Texture" id=57]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_bloody_01.png" type="Texture" id=58]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_bloody_08.png" type="Texture" id=59]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_bloody_09.png" type="Texture" id=60]
+[ext_resource path="res://effects/trap-tiles/spike_trap_tile_bloody_10.png" type="Texture" id=61]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
@@ -140,6 +162,60 @@ frame_5/texture = ExtResource( 38 )
 frame_5/delay_sec = 0.0
 frame_6/texture = ExtResource( 36 )
 frame_6/delay_sec = 0.0
+
+[sub_resource type="AnimatedTexture" id=10]
+frames = 12
+fps = 10.0
+frame_0/texture = ExtResource( 51 )
+frame_1/texture = ExtResource( 43 )
+frame_1/delay_sec = 0.0
+frame_2/texture = ExtResource( 45 )
+frame_2/delay_sec = 0.0
+frame_3/texture = ExtResource( 46 )
+frame_3/delay_sec = 0.0
+frame_4/texture = ExtResource( 41 )
+frame_4/delay_sec = 0.0
+frame_5/texture = ExtResource( 44 )
+frame_5/delay_sec = 0.0
+frame_6/texture = ExtResource( 40 )
+frame_6/delay_sec = 0.0
+frame_7/texture = ExtResource( 42 )
+frame_7/delay_sec = 0.0
+frame_8/texture = ExtResource( 48 )
+frame_8/delay_sec = 0.0
+frame_9/texture = ExtResource( 49 )
+frame_9/delay_sec = 0.0
+frame_10/texture = ExtResource( 50 )
+frame_10/delay_sec = 0.0
+frame_11/texture = ExtResource( 51 )
+frame_11/delay_sec = 0.0
+
+[sub_resource type="AnimatedTexture" id=11]
+frames = 12
+fps = 10.0
+frame_0/texture = ExtResource( 52 )
+frame_1/texture = ExtResource( 58 )
+frame_1/delay_sec = 0.0
+frame_2/texture = ExtResource( 47 )
+frame_2/delay_sec = 0.0
+frame_3/texture = ExtResource( 55 )
+frame_3/delay_sec = 0.0
+frame_4/texture = ExtResource( 54 )
+frame_4/delay_sec = 0.0
+frame_5/texture = ExtResource( 53 )
+frame_5/delay_sec = 0.0
+frame_6/texture = ExtResource( 56 )
+frame_6/delay_sec = 0.0
+frame_7/texture = ExtResource( 57 )
+frame_7/delay_sec = 0.0
+frame_8/texture = ExtResource( 59 )
+frame_8/delay_sec = 0.0
+frame_9/texture = ExtResource( 60 )
+frame_9/delay_sec = 0.0
+frame_10/texture = ExtResource( 61 )
+frame_10/delay_sec = 0.0
+frame_11/texture = ExtResource( 52 )
+frame_11/delay_sec = 0.0
 
 [resource]
 0/name = "BaseTile"
@@ -500,3 +576,23 @@ frame_6/delay_sec = 0.0
 24/navigation_offset = Vector2( 0, 0 )
 24/shapes = [  ]
 24/z_index = 0
+25/name = "spike_trap_tile_06.png 25"
+25/texture = SubResource( 10 )
+25/tex_offset = Vector2( 0, 0 )
+25/modulate = Color( 1, 1, 1, 1 )
+25/region = Rect2( 0, 0, 16, 16 )
+25/tile_mode = 0
+25/occluder_offset = Vector2( 0, 0 )
+25/navigation_offset = Vector2( 0, 0 )
+25/shapes = [  ]
+25/z_index = 0
+26/name = "spike_trap_tile_bloody"
+26/texture = SubResource( 11 )
+26/tex_offset = Vector2( 0, 0 )
+26/modulate = Color( 1, 1, 1, 1 )
+26/region = Rect2( 0, 0, 16, 16 )
+26/tile_mode = 0
+26/occluder_offset = Vector2( 0, 0 )
+26/navigation_offset = Vector2( 0, 0 )
+26/shapes = [  ]
+26/z_index = 0

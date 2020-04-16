@@ -70,14 +70,13 @@ script = ExtResource( 4 )
 position = Vector2( 0, -24 )
 frames = SubResource( 1 )
 animation = "Complete"
-frame = 3
+frame = 1
 playing = true
 
 [node name="Baa_Anim" type="AnimatedSprite" parent="."]
 scale = Vector2( 2, 2 )
 frames = SubResource( 2 )
 animation = "Idle"
-frame = 2
 playing = true
 
 [node name="Baa_Hitbox" type="CollisionShape2D" parent="."]

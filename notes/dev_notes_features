@@ -22,14 +22,14 @@ Features to be implemented
 18. Tile types Singleton **DONE**
 19. Moving Platforms **DONE**
 20. Breakable tiles mass destruction **DONE**
-21. Dialog Cam needs tweening
+21. Dialog Cam needs tweening **DONE**
 22. Cutscene mode player auto switch to gun
-23. Hide UI elements when in cutscene
+23. Hide UI elements when in cutscene **DONE**
 24. Secret Areas
 
 BUGS/ISSUES
 
-* DUCK + SPACE gets stuck sometimes
+* DUCK + SPACE gets stuck sometimes **FIXED**
 * WEAPON/MELEE CD needs a revisit
 * WATER SPLASHES TWICE WHEN PLAYER IS NEAR TILE 19
 * HP BLINK in HUD not working properly **FIXED**

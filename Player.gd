@@ -50,6 +50,7 @@ onready var swim_fx = $FX/SwimFX
 var gun_default_fx: AudioStreamPlayer2D
 var melee_default_fx: AudioStreamPlayer2D
 
+signal on_player_hit
 
 func _ready():
 
@@ -142,12 +143,14 @@ func _physics_process(delta):
 	
 #	DETERMINE THE TILE PLAYER IS SITTING ON CURRENTLY
 	var tile = get_colliding_tile()
-	if tile[0] >= TileTypes.TILE_TYPES.TILE_WATER_SURFACE:
+	if is_water_tile(tile[0]):
 		is_submerged = true
 		submerged_velocity.x = 0
 		submerged_velocity.y = buoyancy
 	elif tile[0] == TileTypes.TILE_TYPES.TILE_INVALID_TILE:
-		is_submerged = false		
+		is_submerged = false
+	else:
+		handle_special_tile(tile)
 		
 	
 #	GROUND MOVEMENT
@@ -184,6 +187,13 @@ func water_splash():
 		splash.position = splash_pos
 	$WaterSplashTimer.start()
 		
+
+#IS COLLIDING TILE IS WATER TILE?
+func is_water_tile(tile:int):
+	if tile in [TileTypes.TILE_TYPES.TILE_WATER_SURFACE, TileTypes.TILE_TYPES.TILE_WATER_BASE]:
+		return true
+	else:
+	 return false	
 		
 		
 #GROUND MOVEMENT HANDLER
@@ -509,6 +519,8 @@ func reduce_one_from_ammo():
 
 #IF PLAYER HAS ARMOR REDUCE DMG FROM ARMOR, IF NOT REDUCE FROM HP
 func reduce_from_armor(dmg):
+	emit_signal("on_player_hit")
+	
 	var remainder = armor - dmg
 	if remainder >= 0:
 		armor = remainder
@@ -519,8 +531,11 @@ func reduce_from_armor(dmg):
 
 
 #REDUCE DIRECTLY FROM HP
-func reduce_from_hp(dmg):
+func reduce_from_hp(dmg):	
 	if is_alive:
+		
+		emit_signal("on_player_hit")
+		
 		var current_hp = PlayerGlobals.get_hp()
 		current_hp -= dmg
 		PlayerGlobals.set_hp(current_hp)
@@ -603,14 +618,36 @@ func switch_to_follow_cam():
 	camtween.start()
 	
 
-#IS PLAYER SUBMERGED/ NOT COUNTING SHALLOW WATER
+#GET COLLIDING TILE ID FROM GIVEN TILEMAP
 func get_colliding_tile() -> Array:
 	var collision_pos = self.global_position
 	var tilemap = get_parent().get_node("BaseLayer/TileMap") as TileMap
 	var tile_collision_pos = tilemap.world_to_map(collision_pos)
 	var tile = tilemap.get_cellv(tile_collision_pos)
 	return [tile, tile_collision_pos, tilemap]
+
+#****** HANDLE SPECIAL TILES ******	
+
+#HANDLE SPECIAL TILE TYPES
+func handle_special_tile(tileinfo:Array):
+	match tileinfo[0]:
+		TileTypes.TILE_TYPES.TILE_TRAP_SPIKE_VISIBLE:
+			handle_spike_trap(tileinfo)
+			tileinfo[2].set_cellv(tileinfo[1], TileTypes.TILE_TYPES.TILE_TRAP_SPIKE_BLOODY_VISIBLE)
+		TileTypes.TILE_TYPES.TILE_TRAP_SPIKE_BLOODY_VISIBLE:
+			handle_spike_trap(tileinfo)
+
+
+#HANDLE SPIKE_TRAP
+func handle_spike_trap(tileinfo:Array):
+	var tile_props = TileProps.get_props(tileinfo[0])
+	var direction = sign($ShootPoint.position.x) * -1
+	velocity.x = speed * direction * 5
+	velocity.y = jump_speed
+	on_enemy_hit(tile_props["damage"])
 	
+
+#***** END OF SPECIAL TILES ******
 
 #***** TOGGLE FUNCTIONS ***
 					
@@ -722,5 +759,3 @@ func _on_OxygenTimer_timeout():
 		PlayerGlobals.set_current_oxygen(0)
 		on_enemy_hit(oxygen_consuption)
 		
-
-

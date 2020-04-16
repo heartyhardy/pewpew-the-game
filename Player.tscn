@@ -222,14 +222,14 @@ animations = [ {
 "name": "ArmorPicked",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 41 ), ExtResource( 40 ), ExtResource( 37 ), ExtResource( 43 ), ExtResource( 39 ), ExtResource( 38 ), ExtResource( 42 ), ExtResource( 41 ), ExtResource( 40 ), ExtResource( 37 ), ExtResource( 43 ), ExtResource( 39 ), ExtResource( 38 ), ExtResource( 42 ) ],
-"loop": true,
-"name": "AmmoPicked",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 25 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 30 ), ExtResource( 27 ), ExtResource( 25 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 30 ), ExtResource( 27 ), ExtResource( 29 ), ExtResource( 29 ) ],
 "loop": true,
 "name": "HPPicked",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 41 ), ExtResource( 40 ), ExtResource( 37 ), ExtResource( 43 ), ExtResource( 39 ), ExtResource( 38 ), ExtResource( 42 ), ExtResource( 41 ), ExtResource( 40 ), ExtResource( 37 ), ExtResource( 43 ), ExtResource( 39 ), ExtResource( 38 ), ExtResource( 42 ) ],
+"loop": true,
+"name": "AmmoPicked",
 "speed": 5.0
 } ]
 
@@ -387,7 +387,7 @@ one_shot = true
 position = Vector2( 10.3207, -1.70516 )
 frames = SubResource( 5 )
 animation = "Bubbles"
-frame = 3
+frame = 1
 playing = true
 __meta__ = {
 "_edit_group_": true

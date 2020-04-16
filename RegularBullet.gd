@@ -73,7 +73,7 @@ func _on_RegularBullet_body_entered(body):
 			"ENEMY":
 				if body.has_method("hit_by_player"):
 					body.hit_by_player(damage)
-			"BAABAA":
+			"NPC_ATTACKABLE":
 				if body.has_method("hit_by_player") and body.has_method("get_dodge_percentage"):
 					var is_dodged = SkillChecks.can_dodge(body.get_dodge_percentage())
 					if is_dodged:

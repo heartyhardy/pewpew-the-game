@@ -1,0 +1,12 @@
+{
+    "25": {
+        "type":"Spiked trap tile",
+        "damage": 50,
+        "knockback": true
+    },
+    "26": {
+        "type":"Bloody spiked trap tile",
+        "damage": 45,
+        "knockback": true
+    }
+}

@@ -25,6 +25,8 @@ var speech_point = 0
 var quest_state = QUEST_STATE.NOT_STARTED
 
 func _ready():
+	self.set_meta("TAG", "NPC_ATTACKABLE")
+	
 	var starting_hp = (remaining_hits / hits_to_trigger_skill_grant) * 100
 	hpbar.on_maxhp_updated(starting_hp)
 	hpbar.on_hp_updated(starting_hp)
@@ -32,10 +34,9 @@ func _ready():
 	dialog_root = JSONLoader.read_json(dialog_file)
 	dialog_state = dialog_root
 	info_bubble.play("Info")
-	
+		
 
 func _physics_process(delta):
-	self.set_meta("TAG", "BAABAA")
 	look_at_player()
 	
 #	IF PLAYER IN CONVERSATION, TURN TOWARDS BAABAA

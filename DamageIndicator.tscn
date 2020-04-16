@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ui/common/on_take_dmg.png" type="Texture" id=1]
+[ext_resource path="res://DamageIndicator.gd" type="Script" id=2]
+
+[node name="DamageIndicator" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 320, 180 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DamageOverlay" type="NinePatchRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 320, 180 )
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PulseTween" type="Tween" parent="."]
+[connection signal="tween_completed" from="PulseTween" to="." method="_on_PulseTween_tween_completed"]
