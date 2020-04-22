@@ -1,4 +1,4 @@
-[gd_scene load_steps=113 format=2]
+[gd_scene load_steps=130 format=2]
 
 [ext_resource path="res://sprites/player/v1/player_v1_03.png" type="Texture" id=1]
 [ext_resource path="res://sprites/player/v1/player_v1_02.png" type="Texture" id=2]
@@ -100,6 +100,21 @@
 [ext_resource path="res://fx/death.wav" type="AudioStream" id=98]
 [ext_resource path="res://fx/jump.wav" type="AudioStream" id=99]
 [ext_resource path="res://fx/swim.wav" type="AudioStream" id=100]
+[ext_resource path="res://effects/dust/jump_dust_cloud_6.png" type="Texture" id=101]
+[ext_resource path="res://effects/dust/jump_dust_cloud_1.png" type="Texture" id=102]
+[ext_resource path="res://effects/dust/jump_dust_cloud_0.png" type="Texture" id=103]
+[ext_resource path="res://effects/dust/jump_dust_cloud_4.png" type="Texture" id=104]
+[ext_resource path="res://effects/dust/jump_dust_cloud_5.png" type="Texture" id=105]
+[ext_resource path="res://effects/dust/jump_dust_cloud_3.png" type="Texture" id=106]
+[ext_resource path="res://effects/dust/jump_dust_cloud_2.png" type="Texture" id=107]
+[ext_resource path="res://effects/dust/coyote_jump_dust_7.png" type="Texture" id=108]
+[ext_resource path="res://effects/dust/coyote_jump_dust_6.png" type="Texture" id=109]
+[ext_resource path="res://effects/dust/coyote_jump_dust_3.png" type="Texture" id=110]
+[ext_resource path="res://effects/dust/coyote_jump_dust_1.png" type="Texture" id=111]
+[ext_resource path="res://effects/dust/coyote_jump_dust_4.png" type="Texture" id=112]
+[ext_resource path="res://effects/dust/coyote_jump_dust_2.png" type="Texture" id=113]
+[ext_resource path="res://effects/dust/coyote_jump_dust_5.png" type="Texture" id=114]
+[ext_resource path="res://effects/dust/coyote_jump_dust_0.png" type="Texture" id=115]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -295,6 +310,22 @@ frame_1/delay_sec = 0.0
 frame_2/texture = ExtResource( 93 )
 frame_2/delay_sec = 0.0
 
+[sub_resource type="SpriteFrames" id=13]
+animations = [ {
+"frames": [ ExtResource( 115 ), ExtResource( 111 ), ExtResource( 113 ), ExtResource( 110 ), ExtResource( 112 ), ExtResource( 114 ), ExtResource( 109 ), ExtResource( 108 ) ],
+"loop": true,
+"name": "CoyoteEffect",
+"speed": 20.0
+} ]
+
+[sub_resource type="SpriteFrames" id=14]
+animations = [ {
+"frames": [ ExtResource( 103 ), ExtResource( 102 ), ExtResource( 107 ), ExtResource( 106 ), ExtResource( 104 ), ExtResource( 105 ), ExtResource( 101 ), ExtResource( 101 ) ],
+"loop": true,
+"name": "Dust",
+"speed": 20.0
+} ]
+
 [node name="Player" type="KinematicBody2D"]
 collision_mask = 22
 script = ExtResource( 15 )
@@ -387,7 +418,7 @@ one_shot = true
 position = Vector2( 10.3207, -1.70516 )
 frames = SubResource( 5 )
 animation = "Bubbles"
-frame = 1
+frame = 3
 playing = true
 __meta__ = {
 "_edit_group_": true
@@ -449,9 +480,29 @@ stream = ExtResource( 98 )
 
 [node name="SwimFX" type="AudioStreamPlayer2D" parent="FX"]
 stream = ExtResource( 100 )
+
+[node name="DustEffects" type="Node2D" parent="."]
+
+[node name="Coyote_Anim" type="AnimatedSprite" parent="DustEffects"]
+visible = false
+position = Vector2( -10.926, 1.23113 )
+frames = SubResource( 13 )
+animation = "CoyoteEffect"
+flip_h = true
+
+[node name="DustCloud_Anim" type="AnimatedSprite" parent="DustEffects"]
+visible = false
+position = Vector2( -1, 1.6928 )
+frames = SubResource( 14 )
+animation = "Dust"
+
+[node name="Coyote_Pos" type="Position2D" parent="DustEffects"]
+position = Vector2( -12.1533, -0.0769453 )
 [connection signal="timeout" from="OxygenTimer" to="." method="_on_OxygenTimer_timeout"]
 [connection signal="animation_finished" from="Player_Anim" to="." method="_on_Player_Anim_animation_finished"]
 [connection signal="timeout" from="PulseStopTimer" to="." method="_on_PulseStopTimer_timeout"]
 [connection signal="timeout" from="PickupStopTimer" to="." method="_on_PickupStopTimer_timeout"]
 [connection signal="animation_finished" from="Pick_Anim" to="." method="_on_Pick_Anim_animation_finished"]
 [connection signal="timeout" from="WaterSplashTimer" to="." method="_on_WaterSplashTimer_timeout"]
+[connection signal="animation_finished" from="DustEffects/Coyote_Anim" to="." method="_on_Coyote_Anim_animation_finished"]
+[connection signal="animation_finished" from="DustEffects/DustCloud_Anim" to="." method="_on_DustCloud_Anim_animation_finished"]

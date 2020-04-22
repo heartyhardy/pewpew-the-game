@@ -1,0 +1,32 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://pickups/collectibles/orange/collectibles_orange_1.png" type="Texture" id=1]
+[ext_resource path="res://Collectible.tscn" type="PackedScene" id=2]
+[ext_resource path="res://pickups/collectibles/orange/collectibles_orange_2.png" type="Texture" id=3]
+[ext_resource path="res://pickups/collectibles/orange/collectibles_orange_0.png" type="Texture" id=4]
+[ext_resource path="res://collectibles/Orange.gd" type="Script" id=5]
+[ext_resource path="res://pickups/collectibles/orange/collectibles_orange_3.png" type="Texture" id=6]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 4 ), ExtResource( 1 ), ExtResource( 3 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "Bounce",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 6.39205, 6.61021 )
+
+[node name="Orange" instance=ExtResource( 2 )]
+script = ExtResource( 5 )
+
+[node name="Collectible_Anim" parent="." index="0"]
+z_index = -1
+frames = SubResource( 1 )
+animation = "Bounce"
+
+[node name="Collectible_Hitbox" parent="." index="1"]
+position = Vector2( 0, 0.307779 )
+shape = SubResource( 2 )
+[connection signal="body_entered" from="." to="." method="_on_Orange_body_entered"]

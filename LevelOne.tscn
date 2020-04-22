@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://tilesets/basic_tileset_v1.tres" type="TileSet" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
@@ -27,6 +27,8 @@
 [ext_resource path="res://BaaBaa.tscn" type="PackedScene" id=25]
 [ext_resource path="res://DialogUI.tscn" type="PackedScene" id=26]
 [ext_resource path="res://DamageIndicator.tscn" type="PackedScene" id=27]
+[ext_resource path="res://collectibles/Orange.tscn" type="PackedScene" id=28]
+[ext_resource path="res://collectibles/Cherries.tscn" type="PackedScene" id=29]
 
 [sub_resource type="CameraTexture" id=1]
 
@@ -137,6 +139,23 @@ scale = Vector2( 1.5, 1.5 )
 
 [node name="PickupHP2" parent="Pickups" instance=ExtResource( 14 )]
 position = Vector2( 1416, -8 )
+
+[node name="Orange" parent="Pickups" instance=ExtResource( 28 )]
+position = Vector2( 824, -32 )
+
+[node name="Orange2" parent="Pickups" instance=ExtResource( 28 )]
+position = Vector2( 808, -48 )
+
+[node name="Orange3" parent="Pickups" instance=ExtResource( 28 )]
+position = Vector2( 696, -56 )
+
+[node name="Cherries" parent="Pickups" instance=ExtResource( 29 )]
+position = Vector2( 352, 40 )
+bonus = 100
+
+[node name="Cherries2" parent="Pickups" instance=ExtResource( 29 )]
+position = Vector2( 1272, -24 )
+bonus = 100
 
 [node name="Trees" type="Node2D" parent="."]
 

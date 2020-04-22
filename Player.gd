@@ -5,6 +5,7 @@ export(int) var armor = 50
 export(int) var ammo = 100
 export(int) var speed = 50
 export(int) var jump_speed = -250
+export(int) var min_jump_speed = -125
 export(int) var swim_speed = 20
 export(int) var current_oxygen = 100
 export(int) var max_oxygen = 100
@@ -34,9 +35,16 @@ var is_submerged = false
 var is_out_of_breath = false
 var is_in_cutscene = false
 
+#COYOTE TIME AND EARLY JUMP
+var can_coyote_jump = true
+var is_jump_pressed = false
+
 onready var oxygenbar = $OxygenBar
 onready var dustray = $DustRay
 onready var dust_particles = $DustOnLanding
+onready var dust_cloud = $DustEffects/DustCloud_Anim
+onready var coyote_jump_dust = $DustEffects/Coyote_Anim
+onready var coyote_jump_dust_pos = $DustEffects/Coyote_Pos
 
 onready var player_cam = $Player_Cam
 onready var camtween = $CameraTween
@@ -115,6 +123,10 @@ func _input(event: InputEvent):
 			KEY_UP:
 				if is_submerged:
 					swim_fx.stop()
+				else:
+#					CONTROLLING JUMP
+					if velocity.y < min_jump_speed:
+						velocity.y = min_jump_speed
 			KEY_DOWN:
 				if is_on_ground and is_ducked:
 						duck(false)
@@ -214,6 +226,7 @@ func handle_ground_movement(delta):
 		hide_haste_effects()
 	
 	if dustray.is_colliding():
+		handle_landing_effect()
 		dust_particles.emitting = true
 		dustray.enabled = false
 		
@@ -234,7 +247,10 @@ func handle_ground_movement(delta):
 					$ShootPoint.position.x *= -1
 					$MeleeHitPoint.position.x *= -1
 					$PassiveEffects/MinorHaste_Ani.position *= -1
-					$PassiveEffects/MinorHaste_Ani.flip_h = false					
+					$PassiveEffects/MinorHaste_Ani.flip_h = false
+					coyote_jump_dust_pos.position.x *= -1
+					coyote_jump_dust.position = coyote_jump_dust_pos.position
+					coyote_jump_dust.flip_h = true					
 	elif Input.is_action_pressed("ui_left") and !is_ducked and !is_taking_damage and is_alive and not is_in_cutscene:			
 		if !is_attacking or !is_on_floor():
 			velocity.x = lerp(velocity.x, -PlayerGlobals.get_speed(), 0.1)
@@ -249,6 +265,9 @@ func handle_ground_movement(delta):
 					$MeleeHitPoint.position.x *= -1
 					$PassiveEffects/MinorHaste_Ani.position *= -1
 					$PassiveEffects/MinorHaste_Ani.flip_h = true
+					coyote_jump_dust_pos.position.x *= -1
+					coyote_jump_dust.position = coyote_jump_dust_pos.position
+					coyote_jump_dust.flip_h = false	
 	else:
 		velocity.x = lerp(velocity.x, 0, 0.2)
 		if is_on_ground and !is_attacking and is_alive and !is_ducked and !is_taking_damage:
@@ -261,6 +280,8 @@ func handle_ground_movement(delta):
 	
 ##	VERTICAL MOVEMENT
 	if Input.is_action_pressed("ui_up"):
+		is_jump_pressed = true
+		handle_early_jump()
 		handle_jump()
 	
 #	CHECK IF PLAYER IS FALLING		
@@ -275,9 +296,15 @@ func handle_ground_movement(delta):
 		if !is_on_ground:
 			is_attacking = false
 		is_on_ground = true
+		can_coyote_jump = true
+		
+		if is_jump_pressed:
+			handle_jump()
+		
 	else:
 		if !is_attacking and is_alive:
 			is_on_ground = false
+			handle_coyote_jump()
 			run_fx.stop()
 			if velocity.y < 0:
 				$Player_Anim.play(Animations.get_animation("JUMP", attack_mode))
@@ -461,15 +488,48 @@ func handle_attacks():
 		
 		
 #JUMP (KEY UP) HANDLER
-func handle_jump():	
-	if !is_ducked and is_on_ground and is_alive and not is_in_cutscene:
+func handle_jump():
+	if !is_ducked and (is_on_ground or can_coyote_jump) and is_alive and not is_in_cutscene:
 		if !is_attacking:
-			velocity.y = PlayerGlobals.get_jump_speed()
 			is_jumping = true
+			velocity.y = PlayerGlobals.get_jump_speed()
 			is_on_ground = false
 	#			PLAY JUMP SOUND FX
-			jump_fx.play()
+			if !jump_fx.playing:
+				jump_fx.play()
 			
+			
+#COYOTE_JUMP MODE
+func handle_coyote_jump():
+	handle_takeoff_effect()
+	yield(get_tree().create_timer(0.1),"timeout")
+	can_coyote_jump = false
+	
+
+#LAST MIN JUMP
+func handle_early_jump():
+	yield(get_tree().create_timer(0.2),"timeout")
+	is_jump_pressed = false
+
+
+#HANDLE LANDING DUST CLOUD EFFECT
+func handle_landing_effect():
+	if sign($ShootPoint.position.x) == -1:
+		dust_cloud.flip_h = true
+	elif sign($ShootPoint.position.x) == 1:
+		dust_cloud.flip_h = false
+	dust_cloud.frame = 0
+	dust_cloud.visible = true		
+	dust_cloud.play()
+
+
+#HANDLE COYOTE TIMER TAKEOFF EFFECT
+func handle_takeoff_effect():
+	if !coyote_jump_dust.playing and can_coyote_jump and abs(velocity.x) > speed/2:
+		coyote_jump_dust.frame = 0
+		coyote_jump_dust.visible = true
+		coyote_jump_dust.play()
+
 
 #SET DUCK ON/OFF
 func duck(enabled:bool)->void:
@@ -759,3 +819,13 @@ func _on_OxygenTimer_timeout():
 		PlayerGlobals.set_current_oxygen(0)
 		on_enemy_hit(oxygen_consuption)
 		
+
+
+
+func _on_DustCloud_Anim_animation_finished():
+	dust_cloud.visible = false
+
+
+func _on_Coyote_Anim_animation_finished():
+	coyote_jump_dust.visible = false
+	coyote_jump_dust.stop()
