@@ -2,6 +2,8 @@
 
 Pewpew is a simple 2D platformer with minimalistic styles
 
+latest video updates visit: [PewPew Devlogs](https://vimeo.com/user111581431)
+
 ## Day 1 - 14/03/2020
 * Drew a 8x8 sprite for Player character
 * Drew a 16x16 basic tilesheet
